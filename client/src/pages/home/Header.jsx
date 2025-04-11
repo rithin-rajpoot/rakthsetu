@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { CiUser } from "react-icons/ci";
 
 const Header = () => {
   return (
@@ -8,7 +9,9 @@ const Header = () => {
         <img className='w-full' src="/images/Logo.png" alt="" />
       </div>
       <div className="h-full min-h-[5rem] mx-12 md:mx-20 flex items-center justify-center">
-        <Link to='/user-profile'> <img src="/images/profileLogo.jpg" alt="User Avatar" className="w-10 h-10 rounded-full cursor-pointer"></img>
+        <Link to='/user-profile'> <button className="rounded-full bg-white/10 hover:bg-white/20">
+          <CiUser className="h-[2.5rem] w-[2.6rem] p-[0.5rem]" />
+        </button>
         </Link>
       </div>
     </div>

@@ -4,7 +4,7 @@ import { getUserProfileThunk, loginUserThunk, signupUserThunk } from './userThun
 const initialState = {
     isAuthenticated: false,
     userProfile: null,
-    loading: false,
+    loading: true,
     otherUsers: [],
     // selectedUser: JSON.parse(localStorage.getItem('selectedUser')),
 }
@@ -61,10 +61,11 @@ const userSlice = createSlice({
         builder.addCase(getUserProfileThunk.fulfilled, (state, action) => {
             state.isAuthenticated = true;
             state.userProfile = action.payload?.responseData;
+            state.loading = false;
         });
 
         builder.addCase(getUserProfileThunk.rejected, (state, action) => {
-            
+            state.loading = false;
         });
     },
 })

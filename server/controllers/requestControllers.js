@@ -23,6 +23,15 @@ export const createBloodRequest = AsyncHandler(async (req, res,next) => {
   });
   // Save to database
   const savedRequest = await newRequest.save();
+
+  // save request into the curr user's data
+await User.findByIdAndUpdate(
+    seekerId,
+    { $push: { userBloodRequests: savedRequest._id } },
+    { new: true }
+  );
+
+
   // match Donor after saving request
   let isFound = await matchDonor(savedRequest); // returns boolean
   if (isFound) {
@@ -36,7 +45,7 @@ export const createBloodRequest = AsyncHandler(async (req, res,next) => {
       message: "Donor's Found Successfully...!",
       responseData: {
         status: data.status,
-      matchedDonors: data.matchedDonorsId,
+        matchedDonors: data.matchedDonorsId,
       }
     });
   }

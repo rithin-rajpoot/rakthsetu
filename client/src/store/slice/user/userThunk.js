@@ -15,8 +15,8 @@ export const loginUserThunk = createAsyncThunk('user/login',
 
         } catch (error) {
             const errorOutput = error?.response?.data?.errMessage;
-            // console.log(errorOutput)
-            toast.error(errorOutput);
+            // console.log(error)
+            // toast.error(errorOutput);
             return rejectWithValue(errorOutput)
         }
     }
@@ -39,8 +39,8 @@ export const signupUserThunk = createAsyncThunk('user/signup',
 
         } catch (error) {
             const errorOutput = error?.response?.data?.errMessage;
-            // console.log(errorOutput)
-            toast.error(errorOutput);
+            // console.log(error)
+            // toast.error(errorOutput);
             return rejectWithValue(errorOutput)
         }
     }

@@ -12,7 +12,7 @@ const RequestForm = () => {
     fullName: "",
     location: "",
     bloodType: "",
-    urgency: "Normal"
+    urgency: "Normal",
   });
 
   const dispatch = useDispatch();
@@ -26,9 +26,9 @@ const RequestForm = () => {
   const handleRequestForm = async () => {
     const response = await dispatch(createBloodRequestThunk(formData));
     // console.log(response);
-    if(response?.payload?.success){
-      navigate('/');
-      toast.success("Blood request created successfully")
+    if (response?.payload?.success) {
+      navigate("/");
+      // toast.success("Blood request created successfully")
     }
   };
 
@@ -36,7 +36,9 @@ const RequestForm = () => {
     <>
       <div className="flex justify-center items-center p-10 min-h-screen">
         <div className="h-full flex max-w-[40rem] w-full flex-col gap-6 bg-base-300 rounded-lg  p-6">
-          <h2 className="text-2xl text-center font-semibold">Make a Blood Request</h2>
+          <h2 className="text-2xl text-center font-semibold">
+            Make a Blood Request
+          </h2>
 
           <label className="input flex items-center gap-2 w-full">
             <FaUser />
@@ -56,6 +58,16 @@ const RequestForm = () => {
               name="location"
               className="grow"
               placeholder="Enter your Current location"
+              onChange={handleInputChange}
+            />
+          </label>
+          <label className="input flex items-center gap-2 w-full">
+            <FaLocationDot />
+            <input
+              type="text"
+              name="urgency"
+              className="grow"
+              placeholder="Urgency.."
               onChange={handleInputChange}
             />
           </label>

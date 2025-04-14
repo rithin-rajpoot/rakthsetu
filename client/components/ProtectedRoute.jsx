@@ -13,7 +13,7 @@ const ProtectedRoute = ({children}) => {
         }
     },[isAuthenticated, loading]);
 
-  return children // returns home component(refer main.jsx)
+  return children // returns LandingPage component(refer main.jsx)
 }
 
 export default ProtectedRoute

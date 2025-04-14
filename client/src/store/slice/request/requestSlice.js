@@ -4,7 +4,7 @@ import { createBloodRequestThunk, getAllRequestsThunk } from './requestThunk';
 const initialState = {
     matchedDonors: [],
     loading: false,
-    allRequests:[]
+    allRequests: []
 }
 
 const requestSlice = createSlice({
@@ -23,7 +23,7 @@ const requestSlice = createSlice({
         });
 
         builder.addCase(createBloodRequestThunk.fulfilled, (state, action) => { // action.payload => contains the data returned from loginUserThunk after fetching 
-            state.matchedDonors =  action.payload?.responseData?.matchedDonors;
+            state.matchedDonors = action.payload?.responseData?.matchedDonors;
 
             state.loading = false;
         });

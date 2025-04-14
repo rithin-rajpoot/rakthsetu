@@ -4,10 +4,10 @@ import { axiosInstance } from '../../../../components/utils/axiosInstance.js'
 
 
 export const createBloodRequestThunk = createAsyncThunk('request/createBloodRequest',
-    async ({ fullName, bloodType, urgency, location }, { rejectWithValue }) => {
+    async ({ fullName, location, urgency, bloodType }, { rejectWithValue }) => {
         try {
-            const response = await axiosInstance.post('/request/create-blood-request',{
-                fullName, bloodType, urgency, location
+            const response = await axiosInstance.post('/request/create-blood-request', {
+                fullName, location, urgency, bloodType
             });
             toast.success("Blood request created successfully")
             return response.data;

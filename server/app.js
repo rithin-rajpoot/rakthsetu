@@ -21,11 +21,11 @@ app.use(cookieParser());
 
 // user routes : 
 import userRouter from './routes/userRouter.js';
-app.use("/ufb/user",userRouter)
+app.use("/ufb/user", userRouter)
 
 // request routes : 
 import bloodRequestRouter from './routes/requestRouter.js';
-app.use("/ufb/request",bloodRequestRouter);
+app.use("/ufb/request", bloodRequestRouter);
 
 
 // ERROR HANDLING MIDDLEWARE

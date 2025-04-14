@@ -10,7 +10,8 @@ const userSchema = new mongoose.Schema({
     type: { type: String, enum: ['Point'], default: 'Point' },
     coordinates: { type: [Number], required: true,default:undefined } // [longitude, latitude]
   },
-  createdAt: { type: Date, default: Date.now }
+  createdAt: { type: Date, default: Date.now },
+  userBloodRequests: [{type: mongoose.Schema.Types.ObjectId, ref: "BloodRequest"}]
 });
 
 userSchema.index({ location: '2dsphere' }); // For geolocation queries

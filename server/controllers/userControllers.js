@@ -109,12 +109,10 @@ export const userLogin = AsyncHandler(
 
 
 export const getProfile = AsyncHandler(async (req, res, next) => {
-  const userData = await User.findById(req.user._id);
+  const userData = await User.findById(req.user._id).populate('userBloodRequests');
   res.status(200).json({
     success: true,
-    responseData: {
-      userData
-    },
+    responseData: userData
   });
 
 })

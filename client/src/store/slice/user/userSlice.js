@@ -6,17 +6,22 @@ const initialState = {
     userProfile: null,
     loading: true,
     otherUsers: [],
-    // selectedUser: JSON.parse(localStorage.getItem('selectedUser')),
+    activeUserRole: 'donor',
+    activeTab: 'requests'
+    // activeUserRole: JSON.parse(localStorage.getItem('selectedUser')),
 }
 
 const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
-        // setSelectedUser: (state, action) => {
-        //     localStorage.setItem('selectedUser',JSON.stringify(action.payload))
-        //     state.selectedUser = action.payload;
-        // }
+        setActiveUserRole: (state, action) => {
+            // localStorage.setItem('selectedUser',JSON.stringify(action.payload))
+            state.activeUserRole = action.payload;
+        },
+        setActiveTab: (state, action) => {
+            state.activeTab = action.payload
+        }
     },
     extraReducers: (builder) => {
         // Login 
@@ -53,13 +58,14 @@ const userSlice = createSlice({
             state.loading = false;
         });
 
-        
+
         // get user profile
         builder.addCase(getUserProfileThunk.pending, (state, action) => {
         });
 
         builder.addCase(getUserProfileThunk.fulfilled, (state, action) => {
             state.isAuthenticated = true;
+            console.log(action.payload)
             state.userProfile = action.payload?.responseData;
             state.loading = false;
         });
@@ -69,6 +75,6 @@ const userSlice = createSlice({
         });
     },
 })
-export const { } = userSlice.actions;
+export const { setActiveUserRole, setActiveTab } = userSlice.actions;
 
 export default userSlice.reducer

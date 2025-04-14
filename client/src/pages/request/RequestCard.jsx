@@ -1,31 +1,23 @@
 import React from "react";
+import { getBloodTypeColor, getUrgencyColor } from "./utils/utilityMethods";
 
-const RequestCard = ({request}) => {
-
-  const getBloodTypeColor = (bloodType) => {
-    if (bloodType.includes('O')) return 'text-red-600';
-    if (bloodType.includes('A')) return 'text-blue-600';
-    if (bloodType.includes('B')) return 'text-purple-600';
-    if (bloodType.includes('AB')) return 'text-green-600';
-    return 'text-gray-600 bg-gray-50';
-  };
-
-  const getUrgencyColor = (urgency) => {
-    switch(urgency) {
-      case 'Urgent': return 'text-red-600 bg-red-100';
-      case 'High': return 'text-orange-600 bg-orange-100';
-      case 'Medium': return 'text-yellow-600 bg-yellow-100';
-      case 'Low': return 'text-green-600 bg-green-100';
-      default: return 'text-gray-600 bg-gray-100';
-    }
-  };
-
+const RequestCard = ({ request }) => {
   return (
     <>
       <div className="w-full bg-white rounded-lg shadow-sm p-5">
         <div className="flex justify-between items-center mb-4">
-          <h2 className={`text-2xl font-bold ${getBloodTypeColor(request?.bloodType)}`}>{request?.bloodType}</h2>
-          <span className={`text-xs px-3 py-1 rounded-full font-medium ${getUrgencyColor(request?.urgency)}`}>
+          <h2
+            className={`text-2xl font-bold ${getBloodTypeColor(
+              request?.bloodType
+            )}`}
+          >
+            {request?.bloodType}
+          </h2>
+          <span
+            className={`text-xs px-3 py-1 rounded-full font-medium ${getUrgencyColor(
+              request?.urgency
+            )}`}
+          >
             {request?.urgency}
           </span>
         </div>

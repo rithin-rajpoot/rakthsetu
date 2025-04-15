@@ -1,23 +1,22 @@
 import User from "../models/user.js";
-import AsyncHandler from "../utils/AsyncHandler.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
 import validateUser from "../middlewares/validateUser.js";
-import ExpressError from "../utils/ExpressError.js";
+import { errorHandler} from "../utils/errorHandler.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
 
-export const userSignUp = AsyncHandler(async (req, res, next) => {
+export const userSignUp = asyncHandler(async (req, res, next) => {
   let { fullName, username, password, email, phone, bloodType, location } = req.body;
-  // console.log(req.body);
   if (!fullName || !username || !email || !phone || !password || !bloodType || !location) {
-    throw new ExpressError(400, "All fields are required");
+    return next(new errorHandler( "All fields are required", 400)) ;
   }
   let coordinates = location.split(",").map(Number); // split location and generate array of strings and then convert them into numbers
-  //==========
+
   const user = await User.findOne({ username });
   if (user) {
-    return next(new ExpressError(400, "User already exists"));
+    return next(new errorHandler("User already exists", 400));
   }
 
   let userData = {
@@ -66,21 +65,21 @@ export const userSignUp = AsyncHandler(async (req, res, next) => {
 
 
 // User Login 
-export const userLogin = AsyncHandler(
+export const userLogin = asyncHandler(
   async (req, res, next) => {
     const { username, password } = req.body;
     if (!username || !password) {
-      return next(new ExpressError(400, "Your password or username is empty"))
+      return next(new errorHandler("Your password or username is empty", 400))
     }
 
     const user = await User.findOne({ username });
     if (!user) {
-      return next(new ExpressError(400, "Your password or username is Invalid!"))
+      return next(new errorHandler("Your password or username is Invalid!", 400))
     }
 
     const isValidPassword = await bcrypt.compare(password, user.password);
     if (!isValidPassword) {
-      return next(new ExpressError(400, "Your password or username is Invalid!"))
+      return next(new errorHandler("Your password or username is Invalid!", 400))
     }
 
     // Generate and send JWT
@@ -108,7 +107,7 @@ export const userLogin = AsyncHandler(
 )
 
 
-export const getProfile = AsyncHandler(async (req, res, next) => {
+export const getProfile = asyncHandler(async (req, res, next) => {
   const userData = await User.findById(req.user._id).populate('userBloodRequests');
   res.status(200).json({
     success: true,
@@ -119,7 +118,7 @@ export const getProfile = AsyncHandler(async (req, res, next) => {
 
 
 
-export const userLogout = AsyncHandler(
+export const userLogout = asyncHandler(
   async (req, res, next) => {
 
     res.status(200)

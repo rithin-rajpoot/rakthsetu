@@ -23,6 +23,7 @@ const userSlice = createSlice({
             state.activeTab = action.payload
         }
     },
+    
     extraReducers: (builder) => {
         // Login 
         builder.addCase(loginUserThunk.pending, (state, action) => {
@@ -37,7 +38,6 @@ const userSlice = createSlice({
         });
 
         builder.addCase(loginUserThunk.rejected, (state, action) => { // action.payload => contains the data returned from rejectWithValue()
-            //   console.log(action.payload)
             state.loading = false;
         });
 
@@ -48,7 +48,6 @@ const userSlice = createSlice({
         });
 
         builder.addCase(signupUserThunk.fulfilled, (state, action) => {
-            // console.log(action.payload?.responseData?.newUser)
             state.userProfile = action.payload?.responseData?.newUser
             state.loading = false;
             state.isAuthenticated = true;

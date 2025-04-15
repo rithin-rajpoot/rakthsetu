@@ -22,13 +22,11 @@ const Signup = () => {
   const navigate = useNavigate();
 
   const handleInputChange = (e) => {
-    // console.log(e.target.value);
     setSignupData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleSignup = async () => {
     const response = await dispatch(signupUserThunk(signupData));
-    // console.log(response);
     if(response?.payload?.success){
       navigate('/');
     }

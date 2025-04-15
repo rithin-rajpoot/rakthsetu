@@ -1,12 +1,13 @@
 import BloodRequest from "../models/request.js"; // Import model
 import matchDonor from "./utilities/matchDonor.js";
-import AsyncHandler from "../utils/AsyncHandler.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
 import User from "../models/user.js";
+import { errorHandler } from "../utils/errorHandler.js";
 
-export const createBloodRequest = AsyncHandler(async (req, res,next) => {
+export const createBloodRequest = asyncHandler(async (req, res,next) => {
   const { fullName, bloodType, urgency, location } = req.body;
   if(!fullName || !bloodType || !urgency || !location){
-    return next(new ExpressError(400,"All fields are required.."));
+    return next(new errorHandler("All fields are required..", 400));
   }
   const seekerId = req.user._id;
   let coordinates = location.split(",").map(Number);
@@ -57,7 +58,7 @@ await User.findByIdAndUpdate(
   });
 });
 
-export const getAllRequests = AsyncHandler(async (req,res,next)=>{
+export const getAllRequests = asyncHandler(async (req,res,next)=>{
     const currUser = await User.findOne({_id: req.user._id});
     // console.log(currUser);
 

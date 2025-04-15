@@ -5,7 +5,7 @@ import { getBloodTypeColor, getUrgencyColor } from "./utils/utilityMethods";
 const UserBloodRequests = () => {
   const { userProfile } = useSelector((state) => state.userReducer);
   const myRequests = userProfile.userBloodRequests;
-  console.log(myRequests);
+  // console.log(myRequests);
 
   return (
     <div className="bg-white shadow rounded-lg overflow-hidden">

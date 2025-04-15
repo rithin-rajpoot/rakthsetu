@@ -29,7 +29,7 @@ app.use("/ufb/request", bloodRequestRouter);
 
 
 // ERROR HANDLING MIDDLEWARE
-import errorMiddleware from './middlewares/errorMiddleware.js';
+import { errorMiddleware } from './middlewares/errorMiddleware.js';
 app.use(errorMiddleware);
 
 

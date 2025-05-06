@@ -56,3 +56,19 @@ export const getUserProfileThunk = createAsyncThunk('user/getProfile',
         }
     }
 );
+
+export const logoutUserThunk = createAsyncThunk('user/logout',
+    async (_, { rejectWithValue }) => {
+        try {
+            const response = await axiosInstance.post('/user/logout');
+            toast.success("Logged Out Successfully!!");
+            return response.data;
+
+        } catch (error) {
+            const errorOutput = error?.response?.data?.errMessage;
+            // console.log(errorOutput)
+            toast.error(errorOutput);
+            return rejectWithValue(errorOutput)
+        }
+    }
+);

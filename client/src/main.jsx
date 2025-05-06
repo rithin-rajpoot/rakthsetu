@@ -8,8 +8,8 @@ import RequestForm from "./pages/request/RequestForm.jsx";
 import { store } from "./store/store.js";
 import { Provider } from "react-redux";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import UserProfile from "./pages/home/UserProfile.jsx";
 import ProtectedRoute from "../components/ProtectedRoute.jsx";
+import UserProfile from "./pages/home/userProfile/UserProfile.jsx";
 
 const router = createBrowserRouter([
   {

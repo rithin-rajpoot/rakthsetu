@@ -4,8 +4,6 @@ import validateUser from "../middlewares/validateUser.js";
 import { errorHandler} from "../utils/errorHandler.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
-dotenv.config();
 
 export const userSignUp = asyncHandler(async (req, res, next) => {
   let { fullName, username, password, email, phone, bloodType, location } = req.body;

@@ -5,8 +5,6 @@ import { FaLocationDot } from "react-icons/fa6";
 import { useDispatch } from "react-redux";
 import { createBloodRequestThunk } from "../../store/slice/request/requestThunk";
 
-import { toast } from "react-hot-toast";
-
 const RequestForm = () => {
   const [formData, setFormData] = useState({
     fullName: "",
@@ -18,6 +16,7 @@ const RequestForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+
   const handleInputChange = (e) => {
     // console.log(e.target.value);
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -28,7 +27,6 @@ const RequestForm = () => {
     // console.log(response);
     if (response?.payload?.success) {
       navigate("/");
-      // toast.success("Blood request created successfully")
     }
   };
 

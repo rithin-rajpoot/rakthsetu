@@ -5,7 +5,7 @@ const validateUser = (userData)=>{
     if(result.error)
     {
         const msg = result.error.details.map(el=>el.message).join(",");
-        return next(new errorHandler(msg, 400))
+        throw new errorHandler(msg, 400)
     }
 }
 

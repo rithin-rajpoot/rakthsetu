@@ -4,7 +4,7 @@ const bloodRequestSchema = new mongoose.Schema({
     fullName:{type:"string", required: true},
     seekerId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     bloodType: { type: String, required: true },
-    urgency: { type: String, enum: ['Normal', 'Urgent'], default: 'Normal' },
+    urgency: { type: String, enum: ['Normal', 'Urgent', 'Medium', 'Low'], default: 'Normal' },
     status: { type: String, enum: ['Pending', 'Matched', 'Completed', 'Cancelled'], default: 'Pending' },
     location: {
         type: { type: String, enum: ['Point'], default: 'Point' },

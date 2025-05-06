@@ -3,7 +3,8 @@ import { useSelector } from "react-redux";
 import { Users, Activity, Droplet, Heart } from "lucide-react";
 
 const StatsOverview = () => {
-  const { activeUserRole } = useSelector((state) => state.userReducer);
+  const { activeUserRole, userProfile } = useSelector((state) => state.userReducer);
+  const { allRequests, matchedDonors } = useSelector((state) => state.requestReducer);
 
   // Get stats based on user role
   const getStats = () => {
@@ -14,14 +15,14 @@ const StatsOverview = () => {
           bgIconColor: "bg-blue-200",
           bgColor: "bg-gradient-to-br from-blue-50 to-blue-200",
           title: "Available to Donate",
-          value: "O+, AB-, B+",
+          value: `${userProfile?.bloodType}`,
         },
         {
           icon: <Activity className="h-6 w-6 text-green-600" />,
           bgIconColor: "bg-green-200",
           bgColor: "bg-gradient-to-br from-emerald-50 to-emerald-200",
           title: "Active Requests",
-          value: "24 in your area",
+          value: `${allRequests.length} in your area`,
         },
         {
           icon: <Users className="h-6 w-6 text-purple-600" />,
@@ -38,21 +39,21 @@ const StatsOverview = () => {
           bgIconColor: "bg-red-200",
           bgColor: "bg-gradient-to-br from-red-50 to-red-200",
           title: "Your Blood Type",
-          value: "AB-",
+          value: `${userProfile?.bloodType}`,
         },
         {
           icon: <Users className="h-6 w-6 text-green-600" />,
           bgIconColor: "bg-green-200",
           bgColor: "bg-gradient-to-br from-emerald-50 to-emerald-200",
           title: "Potential Donors",
-          value: "7 matching donors",
+          value: `${!matchedDonors?.length? '0' : matchedDonors?.length} matching donors`,
         },
         {
           icon: <Activity className="h-6 w-6 text-purple-600" />,
           bgIconColor: "bg-purple-200",
           bgColor: "bg-gradient-to-br from-purple-50 to-purple-200",
           title: "Active Requests",
-          value: "2 pending",
+          value: `${userProfile?.userBloodRequests?.length} pending`,
         },
       ];
     }

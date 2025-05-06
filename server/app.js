@@ -1,6 +1,6 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
-const app = express();
+import { app, server } from './socket/socket.js'
 
 // Database connection
 import {connectDB} from "./db/dbConnection.js";
@@ -35,6 +35,6 @@ app.use(errorMiddleware);
 
 // Start the server 
 const port = process.env.PORT || 5000
-app.listen(port,()=>{
+server.listen(port,()=>{
     console.log(`UFB SERVER LAUNCHED AT :`,port);
 })

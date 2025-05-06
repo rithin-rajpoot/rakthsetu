@@ -4,13 +4,13 @@ import { getBloodTypeColor, getUrgencyColor } from "./utils/utilityMethods";
 
 const UserBloodRequests = () => {
   const { userProfile } = useSelector((state) => state.userReducer);
-  const myRequests = userProfile.userBloodRequests;
+  const myRequests = userProfile?.userBloodRequests;
   // console.log(myRequests);
 
   return (
     <div className="bg-white shadow rounded-lg overflow-hidden">
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
+        <table className="min-w-full divide-y divide-gray-200 border-2 ">
           <thead className="bg-gray-50">
             <tr>
               {/* <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th> */}
@@ -39,11 +39,17 @@ const UserBloodRequests = () => {
               >
                 Responses
               </th>
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Actions
+              </th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {myRequests.map((request) => (
-              <tr key={request.seekerId}>
+              <tr key={request._id}>
                 {/* <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm text-gray-900">{request.date}</div>
                       </td> */}
@@ -68,14 +74,18 @@ const UserBloodRequests = () => {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span
-                    className={`px-2 py-1 text-xs font-medium rounded-full `}
+                    className={`py-1 text-xs font-medium rounded-full `}
                   >
                     {request.status}
                   </span>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <td className="px-10 py-4 whitespace-nowrap text-sm text-gray-500">
                   {/* {request.responses} {request.responses === 1 ? 'donor' : 'donors'} */}
                   null
+                </td>
+                <td className=" py-4 whitespace-nowrap text-xs text-white">
+                  <button className="px-2 py-1 w-[4rem] bg-red-500 mx-2 rounded-lg ">Edit</button>
+                  <button className="px-2 py-1 w-[4rem] bg-red-500 mx-2 rounded-lg ">Delete</button>
                 </td>
               </tr>
             ))}

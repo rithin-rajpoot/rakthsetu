@@ -11,10 +11,10 @@ const requestSlice = createSlice({
     name: 'request',
     initialState,
     reducers: {
-        // setSelectedUser: (state, action) => {
-        //     localStorage.setItem('selectedUser',JSON.stringify(action.payload))
-        //     state.selectedUser = action.payload;
-        // }
+        updateRequests : (state, action) => {
+            const oldRequests = state.allRequests;
+            state.allRequests = [...oldRequests, action.payload];
+        }
     },
     extraReducers: (builder) => {
         // create blood request
@@ -51,6 +51,6 @@ const requestSlice = createSlice({
         });
     },
 })
-export const { } = requestSlice.actions;
+export const { updateRequests } = requestSlice.actions;
 
 export default requestSlice.reducer

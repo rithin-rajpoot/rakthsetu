@@ -1,15 +1,20 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getBloodTypeColor, getUrgencyColor } from "./utils/utilityMethods";
-import { deleteRequestThunk } from "../../store/slice/user/userThunk";
+import { deleteRequestThunk, getUserProfileThunk } from "../../store/slice/user/userThunk";
 import { useNavigate } from "react-router-dom";
 import { setMatchedDonors } from "../../store/slice/request/requestSlice";
 
 const UserBloodRequests = () => {
   const dispatch = useDispatch();
-  const { userProfile } = useSelector((state) => state.userReducer);
+  const { userProfile, loading } = useSelector((state) => state.userReducer);
   const myRequests = userProfile?.userBloodRequests;
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Fetch user profile data to ensure we have the latest
+    dispatch(getUserProfileThunk());
+  }, []);
 
   useEffect(() => {
     // When component mounts, update matched donors if any request has them
@@ -21,11 +26,36 @@ const UserBloodRequests = () => {
         dispatch(setMatchedDonors(requestWithMatchedDonors.matchedDonorsId));
       }
     }
-  }, [myRequests, dispatch]);
+  }, [myRequests]);
 
   const handleDelete = (requestId) => {
     dispatch(deleteRequestThunk({ requestId }));
+    dispatch(setMatchedDonors([]))
   };
+
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="bg-white shadow rounded-lg overflow-hidden p-6 text-center">
+        <p>Loading your blood requests...</p>
+      </div>
+    );
+  }
+
+  // Show when no requests exist
+  if (!myRequests || !Array.isArray(myRequests) || myRequests.length === 0) {
+    return (
+      <div className="bg-white shadow rounded-lg overflow-hidden p-6 text-center">
+        <p>You don't have any blood requests yet.</p>
+        <button 
+          onClick={() => navigate("/request-form")}
+          className="mt-4 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+        >
+          Create a Request
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-white shadow rounded-lg overflow-hidden">
@@ -48,7 +78,7 @@ const UserBloodRequests = () => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {myRequests?.map((request) => (
+            {myRequests.map((request) => (
               <tr key={request?._id}>
                 <td className="pl-20 py-4">
                   <span
@@ -73,16 +103,10 @@ const UserBloodRequests = () => {
                     {request?.status}
                   </span>
                 </td>
-                <td className="px-6 py-4 space-x-2">
-                  <button
-                    onClick={() => navigate("/matched-donors")}
-                    className="px-3 py-1.5 text-xs bg-red-500 rounded-lg text-white"
-                  >
-                    Matched Donors
-                  </button>
+                <td className="px-[4.3rem] py-4">
                   <button
                     onClick={() => handleDelete(request?._id)}
-                    className="px-3 py-1.5 text-xs bg-red-500 rounded-lg text-white"
+                    className="px-5 py-1.5 text-xs bg-red-500 rounded-lg text-white"
                   >
                     Delete
                   </button>

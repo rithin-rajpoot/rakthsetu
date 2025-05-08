@@ -33,7 +33,7 @@ const RequestCard = ({ request, locationName }) => {
           <span className="font-medium">Patient: </span> {request?.fullName}
         </p>
         <p>
-          <span className="font-medium">Location: </span> {locationName || "Loading location..."}
+          <span className="font-medium">Location: </span> {locationName || <span className="loading loading-infinity loading-md"></span>}
         </p>
       </div>
 

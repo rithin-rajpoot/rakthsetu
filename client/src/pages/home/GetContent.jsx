@@ -2,6 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import UserBloodRequests from "../request/UserBloodRequests";
 import RequestList from "../request/RequestList";
+import MatchedDonors from "../request/MatchedDonors";
 
 const GetContent = () => {
   const { activeUserRole, activeTab } = useSelector(
@@ -20,7 +21,7 @@ const GetContent = () => {
       if (activeTab === "myrequests") {
         return <UserBloodRequests />;
       } else {
-        return <h1> matched donors will be displayed here</h1>;
+        return <MatchedDonors />;
       }
     }
   };

@@ -3,6 +3,7 @@ import { createBloodRequestThunk, getAllRequestsThunk } from './requestThunk';
 const initialState = {
     matchedDonors: [],
     loading: false,
+    buttonLoading: false,
     allRequests: [],
     locationNameCache: {},
 }
@@ -40,18 +41,18 @@ const requestSlice = createSlice({
     extraReducers: (builder) => {
         // create blood request
         builder.addCase(createBloodRequestThunk.pending, (state, action) => {
-            state.loading = true;
+            state.buttonLoading = true;
         });
 
         builder.addCase(createBloodRequestThunk.fulfilled, (state, action) => { // action.payload => contains the data returned from loginUserThunk after fetching 
             state.matchedDonors = action.payload?.responseData?.matchedDonors;
 
-            state.loading = false;
+            state.buttonLoading = false;
         });
 
         builder.addCase(createBloodRequestThunk.rejected, (state, action) => { // action.payload => contains the data returned from rejectWithValue()
             //   console.log(action.payload)
-            state.loading = false;
+            state.buttonLoading = false;
         });
 
         // get all blood requests

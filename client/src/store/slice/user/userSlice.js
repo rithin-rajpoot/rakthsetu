@@ -80,7 +80,9 @@ const userSlice = createSlice({
             state.userProfile = null;
             state.otherUsers = null;
             state.isAuthenticated = false;
-            state.loading = false;
+            state.loading = true;
+            state.activeUserRole = 'donor';
+            state.activeTab = 'requests';
         });
 
         builder.addCase(logoutUserThunk.rejected, (state, action) => {
@@ -95,10 +97,11 @@ const userSlice = createSlice({
             const deletedId = action.payload;
             state.userProfile.userBloodRequests = state.userProfile.userBloodRequests.filter(
                 (request) => request._id !== deletedId)
+
+            state.loading = false;
         });
 
         builder.addCase(deleteRequestThunk.rejected, (state, action) => { // action.payload => contains the data returned from rejectWithValue()
-            //   console.log(action.payload)
             state.loading = false;
         });
     },

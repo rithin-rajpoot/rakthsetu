@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FaUser } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { FaLocationDot } from "react-icons/fa6";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { createBloodRequestThunk } from "../../store/slice/request/requestThunk";
 import { getUserProfileThunk } from "../../store/slice/user/userThunk";
 
@@ -16,7 +16,7 @@ const RequestForm = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const { buttonLoading } = useSelector((state) => state.requestReducer);
 
   const handleInputChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -38,7 +38,6 @@ const RequestForm = () => {
           <h2 className="text-2xl text-center font-semibold">
             Make a Blood Request
           </h2>
-
           <label className="input flex items-center gap-2 w-full">
             <FaUser />
             <input
@@ -49,7 +48,6 @@ const RequestForm = () => {
               onChange={handleInputChange}
             />
           </label>
-
           <label className="input flex items-center gap-2 w-full">
             <FaLocationDot />
             <input
@@ -88,10 +86,15 @@ const RequestForm = () => {
             <option>O+</option>
             <option>O-</option>
           </select>
-
-          <button onClick={handleRequestForm} className="btn btn-neutral">
-            Submit Request
-          </button>
+          {buttonLoading ? (
+            <button className="btn btn-neutral">
+              <span className="loading loading-dots loading-lg"></span>
+            </button>
+          ) : (
+            <button onClick={handleRequestForm} className="btn btn-neutral">
+              Submit Request
+            </button>
+          )}
         </div>
       </div>
     </>

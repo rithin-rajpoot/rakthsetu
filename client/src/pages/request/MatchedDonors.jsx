@@ -7,7 +7,6 @@ const MatchedDonors = () => {
 
   return (
     <>
-    <Header />
       <div className="grid grid-cols-1 gap-4 p-4 bg-gray-50">
         {matchedDonors?.map((donor) => (
           <DonorCard key={donor?._id} donor={donor} />

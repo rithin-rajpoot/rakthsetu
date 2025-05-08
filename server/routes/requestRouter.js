@@ -5,6 +5,6 @@ const router = express.Router();
 
 router.post("/create-blood-request", isAuthenticated, createBloodRequest); 
 router.get("/get-all-requests", isAuthenticated, getAllRequests)
-router.post("/delete-request/:requestId", isAuthenticated,deleteBloodRequest );
+router.post("/delete-request/:requestId", isAuthenticated, deleteBloodRequest );
 
 export default router;

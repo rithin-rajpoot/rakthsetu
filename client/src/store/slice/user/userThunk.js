@@ -72,3 +72,20 @@ export const logoutUserThunk = createAsyncThunk('user/logout',
         }
     }
 );
+
+export const deleteRequestThunk = createAsyncThunk('user/deleteRequest',
+    async ({requestId}, { rejectWithValue }) => {
+        try {
+            await axiosInstance.post(`/request/delete-request/${requestId}`);
+            
+            toast.success("Blood Requested Deleted");
+            return requestId;
+
+        } catch (error) {
+            const errorOutput = error?.response?.data?.errMessage;
+            // console.log(errorOutput)
+            toast.error(errorOutput);
+            return rejectWithValue(errorOutput)
+        }
+    }
+);

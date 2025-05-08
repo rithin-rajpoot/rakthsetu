@@ -18,8 +18,6 @@ userSchema.index({ location: '2dsphere' }); // For geolocation queries
 const User = mongoose.model('User', userSchema);
 export default User;
 
-
-
 /*
 Location is a field that stores geographic 
 coordinates (latitude & longitude). */

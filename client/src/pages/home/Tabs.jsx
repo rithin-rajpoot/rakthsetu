@@ -7,7 +7,6 @@ const Tabs = () => {
     (state) => state.userReducer
   );
   const dispatch = useDispatch();
-  // console.log(activeUserRole)
 
   // Get appropriate tabs based on user role
   const getTabs = () => {

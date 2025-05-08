@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaUser } from "react-icons/fa";
 import { FaKey } from "react-icons/fa6";
 import { Link, useNavigate } from "react-router-dom";
@@ -17,7 +17,6 @@ const Login = () => {
   };
 
   const { isAuthenticated } = useSelector(state=>state.userReducer);
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
   
@@ -27,6 +26,12 @@ const Login = () => {
       navigate("/");
     }
   };
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/");
+    }
+  }, [isAuthenticated]);
 
   return (
     <>

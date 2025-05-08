@@ -1,20 +1,41 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { createBloodRequestThunk, getAllRequestsThunk } from './requestThunk';
-
 const initialState = {
     matchedDonors: [],
     loading: false,
-    allRequests: []
+    allRequests: [],
+    locationNameCache: {},
 }
 
 const requestSlice = createSlice({
     name: 'request',
     initialState,
     reducers: {
-        updateRequests : (state, action) => {
+        updateRequests: (state, action) => {
             const oldRequests = state.allRequests;
             state.allRequests = [...oldRequests, action.payload];
-        }
+        },
+
+        removeRequestFromList: (state, action) => {
+            const requestIdToRemove = action.payload;
+            state.allRequests = state.allRequests.filter(request => request._id !== requestIdToRemove);
+        },
+
+        setLocationNameCache: (state, action) => {
+            // action.payload = { requestId: locationName }
+            state.locationNameCache = {...state.locationNameCache,...action.payload};
+        },
+
+        setMatchedDonors: (state, action) => {
+            state.matchedDonors = action.payload;
+        },
+
+        resetRequestState: (state) => {
+            state.matchedDonors = [];
+            state.loading = false;
+            state.allRequests = [];
+            state.locationNameCache = {};
+        }          
     },
     extraReducers: (builder) => {
         // create blood request
@@ -42,6 +63,7 @@ const requestSlice = createSlice({
             // console.log(action.payload);
             state.allRequests = action.payload?.responseData?.nearestRequests;
 
+
             state.loading = false;
         });
 
@@ -51,6 +73,6 @@ const requestSlice = createSlice({
         });
     },
 })
-export const { updateRequests } = requestSlice.actions;
+export const { updateRequests, removeRequestFromList, setLocationNameCache, setMatchedDonors, resetRequestState } = requestSlice.actions;
 
 export default requestSlice.reducer

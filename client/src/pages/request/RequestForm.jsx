@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaLocationDot } from "react-icons/fa6";
 import { useDispatch } from "react-redux";
 import { createBloodRequestThunk } from "../../store/slice/request/requestThunk";
+import { getUserProfileThunk } from "../../store/slice/user/userThunk";
 
 const RequestForm = () => {
   const [formData, setFormData] = useState({
@@ -18,14 +19,14 @@ const RequestForm = () => {
 
 
   const handleInputChange = (e) => {
-    // console.log(e.target.value);
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleRequestForm = async () => {
     const response = await dispatch(createBloodRequestThunk(formData));
-    // console.log(response);
     if (response?.payload?.success) {
+      // Fetch updated user profile after creating request
+      await dispatch(getUserProfileThunk());
       navigate("/");
     }
   };

@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUserThunk } from "../../../store/slice/user/userThunk";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { resetRequestState } from "../../../store/slice/request/requestSlice";
 
 const ProfileBar = ({ logo, fullName, username }) => {
   const dispatch = useDispatch();
@@ -10,6 +11,7 @@ const ProfileBar = ({ logo, fullName, username }) => {
 
   const handleLogout = async () => {
     await dispatch(logoutUserThunk());
+    dispatch(resetRequestState());
   };
 
   useEffect(() => {

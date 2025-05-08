@@ -36,5 +36,5 @@ app.use(errorMiddleware);
 // Start the server 
 const port = process.env.PORT || 5000
 server.listen(port,()=>{
-    console.log(`UFB SERVER LAUNCHED AT :`,port);
+    console.log(`UFB SERVER LAUNCHED AT :`, port);
 })

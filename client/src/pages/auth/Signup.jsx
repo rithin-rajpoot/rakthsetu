@@ -32,6 +32,12 @@ const Signup = () => {
     }
   };
 
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/");
+    }
+  }, [isAuthenticated]);
+
   return (
     <>
       <div className="flex justify-center items-center p-10 min-h-screen">

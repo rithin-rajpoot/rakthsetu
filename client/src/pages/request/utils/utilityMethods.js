@@ -1,8 +1,8 @@
 export const getBloodTypeColor = (bloodType) => {
-    if (bloodType.includes("O")) return "text-red-600";
-    if (bloodType.includes("A")) return "text-blue-600";
-    if (bloodType.includes("B")) return "text-purple-600";
-    if (bloodType.includes("AB")) return "text-green-600";
+    if (bloodType?.includes("O")) return "text-red-600";
+    if (bloodType?.includes("A")) return "text-blue-600";
+    if (bloodType?.includes("B")) return "text-purple-600";
+    if (bloodType?.includes("AB")) return "text-green-600";
     return "text-gray-600 bg-gray-50";
 };
 

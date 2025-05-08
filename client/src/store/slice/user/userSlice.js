@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { getUserProfileThunk, loginUserThunk, logoutUserThunk, signupUserThunk } from './userThunk'
+import { deleteRequestThunk, getUserProfileThunk, loginUserThunk, logoutUserThunk, signupUserThunk } from './userThunk'
+import { setMatchedDonors } from '../request/requestSlice';
 
 const initialState = {
     isAuthenticated: false,
@@ -8,7 +9,6 @@ const initialState = {
     otherUsers: [],
     activeUserRole: 'donor',
     activeTab: 'requests'
-    // activeUserRole: JSON.parse(localStorage.getItem('selectedUser')),
 }
 
 const userSlice = createSlice({
@@ -16,14 +16,14 @@ const userSlice = createSlice({
     initialState,
     reducers: {
         setActiveUserRole: (state, action) => {
-            // localStorage.setItem('selectedUser',JSON.stringify(action.payload))
             state.activeUserRole = action.payload;
         },
         setActiveTab: (state, action) => {
             state.activeTab = action.payload
-        }
+        },
+
     },
-    
+
     extraReducers: (builder) => {
         // Login 
         builder.addCase(loginUserThunk.pending, (state, action) => {
@@ -31,7 +31,6 @@ const userSlice = createSlice({
         });
 
         builder.addCase(loginUserThunk.fulfilled, (state, action) => { // action.payload => contains the data returned from loginUserThunk after fetching 
-            // console.log(action.payload?.responseData?.user)
             state.userProfile = action.payload?.responseData?.user // store the data fetched from backend
             state.isAuthenticated = true;
             state.loading = false;
@@ -49,8 +48,8 @@ const userSlice = createSlice({
 
         builder.addCase(signupUserThunk.fulfilled, (state, action) => {
             state.userProfile = action.payload?.responseData?.newUser
-            state.loading = false;
             state.isAuthenticated = true;
+            state.loading = false;
         });
 
         builder.addCase(signupUserThunk.rejected, (state, action) => {
@@ -64,7 +63,6 @@ const userSlice = createSlice({
 
         builder.addCase(getUserProfileThunk.fulfilled, (state, action) => {
             state.isAuthenticated = true;
-            // console.log(action.payload)
             state.userProfile = action.payload?.responseData;
             state.loading = false;
         });
@@ -73,18 +71,35 @@ const userSlice = createSlice({
             state.loading = false;
         });
 
-          // Logout
+        // Logout
         builder.addCase(logoutUserThunk.pending, (state, action) => {
-            // state.buttonLoading = true;
+            state.loading = true;
         });
 
         builder.addCase(logoutUserThunk.fulfilled, (state, action) => {
             state.userProfile = null;
             state.otherUsers = null;
             state.isAuthenticated = false;
+            state.loading = false;
         });
 
         builder.addCase(logoutUserThunk.rejected, (state, action) => {
+        });
+
+        // delete blood request
+        builder.addCase(deleteRequestThunk.pending, (state, action) => {
+            state.loading = true;
+        });
+
+        builder.addCase(deleteRequestThunk.fulfilled, (state, action) => { // action.payload => contains the data returned from loginUserThunk after fetching 
+            const deletedId = action.payload;
+            state.userProfile.userBloodRequests = state.userProfile.userBloodRequests.filter(
+                (request) => request._id !== deletedId)
+        });
+
+        builder.addCase(deleteRequestThunk.rejected, (state, action) => { // action.payload => contains the data returned from rejectWithValue()
+            //   console.log(action.payload)
+            state.loading = false;
         });
     },
 })

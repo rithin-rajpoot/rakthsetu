@@ -10,6 +10,8 @@ import { Provider } from "react-redux";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ProtectedRoute from "../components/ProtectedRoute.jsx";
 import UserProfile from "./pages/home/userProfile/UserProfile.jsx";
+import LiveTracker from "./pages/map/LiveTracker.jsx";
+import MatchedDonors from "./pages/request/MatchedDonors.jsx";
 
 const router = createBrowserRouter([
   {
@@ -35,6 +37,14 @@ const router = createBrowserRouter([
   {
     path: "/user-profile",
     element: <UserProfile />,
+  },
+  {
+    path: "/live-tracker",
+    element: <LiveTracker/>,
+  },
+  {
+    path: "/matched-donors",
+    element: <MatchedDonors/>,
   },
 ]);
 

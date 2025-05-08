@@ -4,6 +4,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import User from "../models/user.js";
 import { errorHandler } from "../utils/errorHandler.js";
 import { io } from "../socket/socket.js";
+import { getCoordinates } from "./utilities/nameToLatLong.js";
 
 export const createBloodRequest = asyncHandler(async (req, res, next) => {
   const { fullName, bloodType, urgency, location } = req.body;
@@ -11,7 +12,10 @@ export const createBloodRequest = asyncHandler(async (req, res, next) => {
     return next(new errorHandler("All fields are required..", 400));
   }
   const seekerId = req.user._id;
-  let coordinates = location.split(",").map(Number);
+
+  // Usage
+  const coordinates = await getCoordinates(location);
+  // console.log(coordinates);
   // Create a new blood request document
   const newRequest = new BloodRequest({
     fullName,
@@ -43,24 +47,26 @@ export const createBloodRequest = asyncHandler(async (req, res, next) => {
     let data = await BloodRequest.findById(savedRequest._id).populate(
       "matchedDonorsId"
     );
-    // console.log(data)
     return res.status(200).json({
       success: true,
       message: "Donor's Found Successfully...!",
       responseData: {
         status: data.status,
         matchedDonors: data.matchedDonorsId,
+        newBloodRequest: savedRequest,
       }
     });
   }
-
   
-
   // Respond with inserted ID
   res.status(201).json({
     success: true,
     message: "Blood request created, matching in progress!",
-    newBloodRequest: savedRequest,
+    responseData: {
+      status: savedRequest.status,
+      newBloodRequest: savedRequest,
+    }
+    
   });
 });
 
@@ -86,9 +92,14 @@ export const getAllRequests = asyncHandler(async (req, res, next) => {
 })
 
 export const deleteBloodRequest = asyncHandler(async (req, res, next) => {
+  const currUserId = req.user._id;
   const requestId = req.params.requestId;
+  await User.findByIdAndUpdate(currUserId,  {$pull: {userBloodRequests: requestId}});
 
   await BloodRequest.findByIdAndDelete(requestId);
+  
+   // web socket implementation
+   io.emit('removeRequest', requestId);
 
   res.status(200).json({
     success: true,

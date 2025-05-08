@@ -4,13 +4,14 @@ import validateUser from "../middlewares/validateUser.js";
 import { errorHandler} from "../utils/errorHandler.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { getCoordinates } from "./utilities/nameToLatLong.js";
 
 export const userSignUp = asyncHandler(async (req, res, next) => {
   let { fullName, username, password, email, phone, bloodType, location } = req.body;
   if (!fullName || !username || !email || !phone || !password || !bloodType || !location) {
     return next(new errorHandler( "All fields are required", 400)) ;
   }
-  let coordinates = location.split(",").map(Number); // split location and generate array of strings and then convert them into numbers
+  const coordinates = await getCoordinates(location);
 
   const user = await User.findOne({ username });
   if (user) {
@@ -106,12 +107,18 @@ export const userLogin = asyncHandler(
 
 
 export const getProfile = asyncHandler(async (req, res, next) => {
-  const userData = await User.findById(req.user._id).populate('userBloodRequests');
+  const userData = await User.findById(req.user._id)
+    .populate({
+      path: 'userBloodRequests',
+      populate: {
+        path: 'matchedDonorsId',
+        model: 'User'
+      }
+    });
   res.status(200).json({
     success: true,
     responseData: userData
   });
-
 })
 
 

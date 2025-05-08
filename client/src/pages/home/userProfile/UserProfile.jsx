@@ -1,18 +1,11 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getUserProfileThunk } from "../../../store/slice/user/userThunk";
+import React from "react";
+import { useSelector } from "react-redux";
 import Heading from "./Heading";
 import ProfileBar from "./ProfileBar";
 import InfoSlice from "./InfoSlice";
 
 const UserProfile = () => {
-  const dispatch = useDispatch();
   const { userProfile } = useSelector((state) => state.userReducer);
-  // console.log(userProfile)
-
-  useEffect(() => {
-    dispatch(getUserProfileThunk());
-  }, []);
 
   const logo = userProfile?.fullName
     .split(" ")

@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaMobile } from "react-icons/fa6";
 import { SiGmail } from "react-icons/si";
 import { FaLocationDot } from "react-icons/fa6";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { signupUserThunk } from "../../store/slice/user/userThunk";
 
 const Signup = () => {
@@ -20,6 +20,9 @@ const Signup = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { isAuthenticated, buttonLoading } = useSelector(
+    (state) => state.userReducer
+  );
 
   const handleInputChange = (e) => {
     setSignupData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -27,8 +30,8 @@ const Signup = () => {
 
   const handleSignup = async () => {
     const response = await dispatch(signupUserThunk(signupData));
-    if(response?.payload?.success){
-      navigate('/');
+    if (response?.payload?.success) {
+      navigate("/");
     }
   };
 
@@ -124,9 +127,15 @@ const Signup = () => {
             <option>O-</option>
           </select>
 
-          <button onClick={handleSignup} className="btn btn-neutral">
-            Signup
-          </button>
+          {buttonLoading ? (
+            <button className="btn btn-neutral">
+              <span className="loading loading-dots loading-lg"></span>
+            </button>
+          ) : (
+            <button onClick={handleSignup} className="btn btn-neutral">
+              Signup
+            </button>
+          )}
           <p>
             Already have an account?&nbsp;{" "}
             <Link className="text-blue-500 underline" to="/login">

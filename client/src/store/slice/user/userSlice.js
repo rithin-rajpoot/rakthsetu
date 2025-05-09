@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { deleteRequestThunk, getUserProfileThunk, loginUserThunk, logoutUserThunk, signupUserThunk } from './userThunk'
-import { setMatchedDonors } from '../request/requestSlice';
 
 const initialState = {
     isAuthenticated: false,
@@ -8,7 +7,8 @@ const initialState = {
     loading: true,
     otherUsers: [],
     activeUserRole: 'donor',
-    activeTab: 'requests'
+    activeTab: 'requests',
+    buttonLoading: false
 }
 
 const userSlice = createSlice({
@@ -44,16 +44,18 @@ const userSlice = createSlice({
         // Sign up user
         builder.addCase(signupUserThunk.pending, (state, action) => {
             state.loading = true;
+            state.buttonLoading = true;
         });
 
         builder.addCase(signupUserThunk.fulfilled, (state, action) => {
             state.userProfile = action.payload?.responseData?.newUser
             state.isAuthenticated = true;
             state.loading = false;
+            state.buttonLoading= false;
         });
 
         builder.addCase(signupUserThunk.rejected, (state, action) => {
-            state.loading = false;
+            state.buttonLoading = false;
         });
 
 

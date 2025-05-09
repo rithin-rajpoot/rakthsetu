@@ -12,12 +12,12 @@ const UserBloodRequests = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch user profile data to ensure we have the latest
+    // Fetch user profile data to ensure we have the latest, since when new request is created the userProfile data changes
     dispatch(getUserProfileThunk());
   }, []);
 
+  // When page is refreshed we have persist the matchedDonors
   useEffect(() => {
-    // When component mounts, update matched donors if any request has them
     if (myRequests?.length > 0) {
       const requestWithMatchedDonors = myRequests.find(
         (request) => request.matchedDonorsId?.length > 0
@@ -33,7 +33,6 @@ const UserBloodRequests = () => {
     dispatch(setMatchedDonors([]))
   };
 
-  // Show loading state
   if (loading) {
     return (
       <div className="bg-white shadow rounded-lg overflow-hidden p-6 text-center">
@@ -42,7 +41,6 @@ const UserBloodRequests = () => {
     );
   }
 
-  // Show when no requests exist
   if (!myRequests || !Array.isArray(myRequests) || myRequests.length === 0) {
     return (
       <div className="bg-white shadow rounded-lg overflow-hidden p-6 text-center">
@@ -82,7 +80,7 @@ const UserBloodRequests = () => {
               <tr key={request?._id}>
                 <td className="pl-20 py-4">
                   <span
-                    className={`px-2 py-1 text-xs font-medium rounded-full ${getBloodTypeColor(
+                    className={`px-2 py-1 text-md font-medium rounded-full ${getBloodTypeColor(
                       request?.bloodType
                     )}`}
                   >

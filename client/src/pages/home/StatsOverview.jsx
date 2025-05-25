@@ -22,7 +22,7 @@ const StatsOverview = () => {
           bgIconColor: "bg-green-200",
           bgColor: "bg-gradient-to-br from-emerald-50 to-emerald-200",
           title: "Active Requests",
-          value: `${allRequests.length} in your area`,
+          value: `${allRequests?.length} in your area`,
         },
         {
           icon: <Users className="h-6 w-6 text-purple-600" />,

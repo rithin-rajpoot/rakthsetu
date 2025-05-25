@@ -30,13 +30,13 @@ const userSlice = createSlice({
             state.loading = true;
         });
 
-        builder.addCase(loginUserThunk.fulfilled, (state, action) => { // action.payload => contains the data returned from loginUserThunk after fetching 
-            state.userProfile = action.payload?.responseData?.user // store the data fetched from backend
+        builder.addCase(loginUserThunk.fulfilled, (state, action) => { 
+            state.userProfile = action.payload?.responseData?.user
             state.isAuthenticated = true;
             state.loading = false;
         });
 
-        builder.addCase(loginUserThunk.rejected, (state, action) => { // action.payload => contains the data returned from rejectWithValue()
+        builder.addCase(loginUserThunk.rejected, (state, action) => { 
             state.loading = false;
         });
 
@@ -95,7 +95,7 @@ const userSlice = createSlice({
             state.loading = true;
         });
 
-        builder.addCase(deleteRequestThunk.fulfilled, (state, action) => { // action.payload => contains the data returned from loginUserThunk after fetching 
+        builder.addCase(deleteRequestThunk.fulfilled, (state, action) => { 
             const deletedId = action.payload;
             state.userProfile.userBloodRequests = state.userProfile.userBloodRequests.filter(
                 (request) => request._id !== deletedId)
@@ -103,7 +103,7 @@ const userSlice = createSlice({
             state.loading = false;
         });
 
-        builder.addCase(deleteRequestThunk.rejected, (state, action) => { // action.payload => contains the data returned from rejectWithValue()
+        builder.addCase(deleteRequestThunk.rejected, (state, action) => { 
             state.loading = false;
         });
     },

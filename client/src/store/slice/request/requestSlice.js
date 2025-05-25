@@ -60,16 +60,14 @@ const requestSlice = createSlice({
             state.loading = true;
         });
 
-        builder.addCase(getAllRequestsThunk.fulfilled, (state, action) => { // action.payload => contains the data returned from loginUserThunk after fetching 
-            // console.log(action.payload);
+        builder.addCase(getAllRequestsThunk.fulfilled, (state, action) => { 
             state.allRequests = action.payload?.responseData?.nearestRequests;
 
 
             state.loading = false;
         });
 
-        builder.addCase(getAllRequestsThunk.rejected, (state, action) => { // action.payload => contains the data returned from rejectWithValue()
-            //   console.log(action.payload)
+        builder.addCase(getAllRequestsThunk.rejected, (state, action) => { 
             state.loading = false;
         });
     },

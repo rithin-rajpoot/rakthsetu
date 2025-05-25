@@ -3,9 +3,11 @@ import { useSelector } from "react-redux";
 import Heading from "./Heading";
 import ProfileBar from "./ProfileBar";
 import InfoSlice from "./InfoSlice";
+import { useNavigate } from "react-router-dom";
 
 const UserProfile = () => {
-  const { userProfile } = useSelector((state) => state.userReducer);
+  const { userProfile, isAuthenticated } = useSelector((state) => state.userReducer);
+  const navigate = useNavigate();
 
   const logo = userProfile?.fullName
     .split(" ")
@@ -41,6 +43,11 @@ const UserProfile = () => {
       value: "* Active",
     },
   ];
+
+  if(!isAuthenticated) {
+    navigate("/login");
+    return null; // Prevent rendering if not authenticated
+  }
 
   return (
     <div className="mx-auto relative top-[2rem] h-fit md:h-[85vh] w-[90vw] bg-[#F4F6FF] rounded-md">

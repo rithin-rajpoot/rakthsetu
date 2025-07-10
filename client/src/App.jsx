@@ -10,7 +10,6 @@ import Signup from "./pages/auth/Signup";
 import RequestForm from "./pages/request/RequestForm";
 import UserProfile from "./pages/home/userProfile/UserProfile";
 import MatchedDonors from "./pages/request/MatchedDonors";
-import LiveTracker from "./pages/map/LiveTracker";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -37,7 +36,6 @@ const App = () => {
         <Route path="/signup" element={<Signup /> } />
         <Route path="/request-form" element={<RequestForm />} />
         <Route path="/user-profile" element={<UserProfile />} />
-        <Route path="/live-tracker" element={<LiveTracker />} />
         <Route path="/matched-donors" element={<MatchedDonors />} />
       </Routes>
     </>

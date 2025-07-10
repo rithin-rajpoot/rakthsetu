@@ -1,12 +1,10 @@
-import React, { useEffect, useState } from "react";
+
 import { getBloodTypeColor, getUrgencyColor } from "./utils/utilityMethods";
-import { useNavigate } from "react-router-dom";
 
 const RequestCard = ({ request, locationName }) => {
-  const navigate = useNavigate();
 
   const handleRespond = () => {
-    navigate("/live-tracker");
+
   };
 
   return (

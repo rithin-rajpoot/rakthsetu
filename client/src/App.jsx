@@ -10,6 +10,7 @@ import Signup from "./pages/auth/Signup";
 import RequestForm from "./pages/request/RequestForm";
 import UserProfile from "./pages/home/userProfile/UserProfile";
 import MatchedDonors from "./pages/request/MatchedDonors";
+import UFBRouteMap from "./pages/map/UFBRouteMap";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -37,6 +38,7 @@ const App = () => {
         <Route path="/request-form" element={<RequestForm />} />
         <Route path="/user-profile" element={<UserProfile />} />
         <Route path="/matched-donors" element={<MatchedDonors />} />
+        <Route path="/map" element={<UFBRouteMap />}/>
       </Routes>
     </>
   );

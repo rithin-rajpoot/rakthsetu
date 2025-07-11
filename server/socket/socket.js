@@ -19,8 +19,24 @@ const io = new Server(server,
     }
 );
 
+const activeUsers = new Map();
+
 io.on("connection", (socket) => {
     console.log("User Connected", socket.id);
+
+    const userId = socket.handshake.query.userId;
+    // console.log("User ID:", userId);
+    if (userId) {
+        activeUsers.set(userId, socket.id);
+    }
+
+    socket.on('donor-responded', ({ seekerId, donorLocation, seekerLocation }) => {
+    const seekerSocketId = activeUsers.get(seekerId);
+    // console.log(seekerId,donorLocation);
+    if (seekerSocketId) {
+      io.to(seekerSocketId).emit('show-map', {donorLocation,seekerLocation}); // Emit donor location to seeker
+    }
+  });
 
     socket.on("disconnect", () =>{
         console.log("Disconnected");

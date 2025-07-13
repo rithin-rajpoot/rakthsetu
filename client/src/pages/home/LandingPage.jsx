@@ -11,6 +11,7 @@ import { removeRequestFromList, updateRequests } from "../../store/slice/request
 import toast from "react-hot-toast";
 import { setDonorCoords, setSeekerCoords } from "../../store/slice/coordinates/coordinateSlice";
 import FloatingCard from "./FloatingCard";
+import { filterEmittedRequests } from "../../../components/utils/filterEmittedRequests";
 
 const LandingPage = () => {
   const dispatch = useDispatch();
@@ -27,6 +28,9 @@ const LandingPage = () => {
     if (!socket) return;
 
     socket.on("newBloodRequest", (newBloodRequest) => { 
+      const userLocation = userProfile?.location?.coordinates;
+      const recievedRequestLocation = newBloodRequest?.location?.coordinates;
+      if(!filterEmittedRequests(userLocation[0], userLocation[1], recievedRequestLocation[0], recievedRequestLocation[1])) return;
       dispatch(updateRequests(newBloodRequest));
       toast.success("New Blood Request Created")
     });
@@ -35,9 +39,9 @@ const LandingPage = () => {
       dispatch(removeRequestFromList(requestIdToRemove));
     });
 
-    socket.on("show-map", (donorLocation, seekerLocation) => { 
-        dispatch(setSeekerCoords(seekerLocation));
-        dispatch(setDonorCoords(donorLocation));
+    socket.on("show-map", ({donorLocation, seekerLocation}) => { 
+      dispatch(setDonorCoords(donorLocation));
+      dispatch(setSeekerCoords(seekerLocation));
         setIsOpen(true);
     });
 
@@ -60,8 +64,8 @@ const LandingPage = () => {
         <CreateBloodRequest />
         <StatsOverview />
         <Tabs />
-        <GetContent />
         {isOpen && (<FloatingCard isOpen={isOpen} onClose={()=>{setIsOpen(!isOpen)}}/>)}
+        <GetContent />
       </main>
       {/* <footer className="text-black">@all rights reserved</footer> */}
     </div>

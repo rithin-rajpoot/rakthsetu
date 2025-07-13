@@ -6,6 +6,7 @@ const initialState = {
     buttonLoading: false,
     allRequests: [],
     locationNameCache: {},
+    popUp: false,
 }
 
 const requestSlice = createSlice({
@@ -36,7 +37,11 @@ const requestSlice = createSlice({
             state.loading = false;
             state.allRequests = [];
             state.locationNameCache = {};
-        }          
+        }, 
+        
+        setPopUp: (state, action) => {
+            state.popUp = action.payload;
+        }
     },
     extraReducers: (builder) => {
         // create blood request
@@ -62,7 +67,7 @@ const requestSlice = createSlice({
 
         builder.addCase(getAllRequestsThunk.fulfilled, (state, action) => { 
             state.allRequests = action.payload?.responseData?.nearestRequests;
-
+            
 
             state.loading = false;
         });

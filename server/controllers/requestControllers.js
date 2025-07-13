@@ -36,7 +36,7 @@ export const createBloodRequest = asyncHandler(async (req, res, next) => {
     { $push: { userBloodRequests: savedRequest._id } },
     { new: true }
   );
-
+  
   // web socket implementation
   io.emit('newBloodRequest', savedRequest);
 
@@ -79,7 +79,7 @@ export const getAllRequests = asyncHandler(async (req, res, next) => {
     location: {
       $near: {
         $geometry: currUser.location,
-        $maxDistance: 5000 // 5km radius
+        $maxDistance: 10000 // 5km radius
       }
     }
   });

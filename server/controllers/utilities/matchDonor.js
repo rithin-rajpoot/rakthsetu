@@ -9,7 +9,7 @@ const matchDonor = async (bloodRequest) => {
               location: {
                   $near: {
                       $geometry: bloodRequest.location,
-                      $maxDistance: 5000 // 5km radius
+                      $maxDistance: 10000 // 5km radius
                 }
             }
         });

@@ -26,10 +26,10 @@ const FloatingCard = ({ isOpen, onClose }) => {
               <Smile className="text-yellow-500 w-12 h-12" />
             </div>
             <h3 className="text-xl font-semibold text-gray-800 mb-2">
-              Action Required
+              Your request is accepted!
             </h3>
             <p className="text-gray-600 text-sm leading-relaxed">
-              This is a simple message displayed in the floating card. You can customize this content based on your needs.
+              open the map to see donor location
             </p>
           </div>
           

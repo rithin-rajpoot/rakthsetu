@@ -32,7 +32,7 @@ io.on("connection", (socket) => {
 
     socket.on('donor-responded', ({ seekerId, donorLocation, seekerLocation }) => {
     const seekerSocketId = activeUsers.get(seekerId);
-    // console.log(seekerId,donorLocation);
+    console.log(seekerLocation,donorLocation);
     if (seekerSocketId) {
       io.to(seekerSocketId).emit('show-map', {donorLocation,seekerLocation}); // Emit donor location to seeker
     }

@@ -3,24 +3,35 @@ import { getBloodTypeColor, getUrgencyColor } from "./utils/utilityMethods";
 import { getDonorCoords } from "../map/methods/getDonorCoords";
 import { useDispatch, useSelector } from "react-redux";
 import { setDonorCoords, setSeekerCoords } from "../../store/slice/coordinates/coordinateSlice";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const RequestCard = ({ request, locationName }) => {
 
   const { socket } = useSelector((state) => state.socketReducer);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  
   
 
   const handleRespond = async (seekerId, seekerLocation) => {
-    const donorLocation = await getDonorCoords(); // Assume this function retrieves the donor's coordinates
+    const donorLocation = await getDonorCoords();
+    // console.log(donorLocation) // Assume this function retrieves the donor's coordinates
     if (!donorLocation) {
       console.error("Could not retrieve donor location");
       return;
     }
 
+    seekerLocation = {
+      lat: seekerLocation?.coordinates[0],
+      lng: seekerLocation?.coordinates[1]
+    }
 
     socket.emit("donor-responded", { seekerId, donorLocation, seekerLocation });
     dispatch(setSeekerCoords(seekerLocation));
     dispatch(setDonorCoords(donorLocation));
+
+    navigate("/map");
   };
 
   return (

@@ -30,7 +30,7 @@ const LandingPage = () => {
     socket.on("newBloodRequest", (newBloodRequest) => { 
       const userLocation = userProfile?.location?.coordinates;
       const recievedRequestLocation = newBloodRequest?.location?.coordinates;
-      if(!filterEmittedRequests(userLocation[0], userLocation[1], recievedRequestLocation[0], recievedRequestLocation[1])) return;
+      if(!filterEmittedRequests(userLocation[0], userLocation[1], recievedRequestLocation[0], rec)) return;
       dispatch(updateRequests(newBloodRequest));
       toast.success("New Blood Request Created")
     });

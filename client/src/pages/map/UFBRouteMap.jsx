@@ -22,7 +22,8 @@ const { seekerCoords, donorCoords } = useSelector((state) => state.coordinatesRe
   const [pickupMarker, setPickupMarker] = useState(null);
   const [destMarker, setDestMarker] = useState(null);
 
-  const API_KEY = "AIzaSyCOtVbWRTT9363CBuZ7yz3SqEokQ4jXLVk";
+  const API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+  console.log(API_KEY)
 
   // Define initMap function before useEffect
   const initMap = () => {

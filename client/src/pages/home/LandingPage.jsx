@@ -12,6 +12,7 @@ import toast from "react-hot-toast";
 import { setDonorCoords, setSeekerCoords } from "../../store/slice/coordinates/coordinateSlice";
 import FloatingCard from "./FloatingCard";
 import { filterEmittedRequests } from "../../../components/utils/filterEmittedRequests";
+import Footer from "./Footer";
 
 const LandingPage = () => {
   const dispatch = useDispatch();
@@ -67,6 +68,7 @@ const LandingPage = () => {
         {isOpen && (<FloatingCard isOpen={isOpen} onClose={()=>{setIsOpen(!isOpen)}}/>)}
         <GetContent />
       </main>
+      <Footer/>
       {/* <footer className="text-black">@all rights reserved</footer> */}
     </div>
   );

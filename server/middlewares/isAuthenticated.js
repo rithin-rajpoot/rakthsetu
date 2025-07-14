@@ -5,7 +5,7 @@ import { errorHandler }  from '../utils/errorHandler.js';
 const isAuthenticated = asyncHandler(async (req, res, next) => {
     const token = req.cookies.token || req.headers.authorization?.split(' ')[1];/* || req.query.token*/ // we have sent the token in cookie while login and signup
     if (!token) {
-        return next(new errorHandler("Token not found. Please log in!", 401)); // if the user is not logged in or token has expired
+        return next(new errorHandler("Session Expired. Please log in!", 401)); // if the user is not logged in or token has expired
     }
 
     const tokenData = jwt.verify(token, process.env.JWT_SECRET); // returns the token data set during login or signup

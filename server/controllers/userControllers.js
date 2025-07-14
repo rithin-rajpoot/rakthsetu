@@ -121,6 +121,16 @@ export const getProfile = asyncHandler(async (req, res, next) => {
   });
 })
 
+export const getProfileById = asyncHandler(async (req, res, next) => {
+  const userId = req.params.id;
+  // console.log("userId-",userId)
+  const userData = await User.findById(userId);
+    
+  res.status(200).json({
+    success: true,
+    responseData: userData
+  });
+})
 
 
 export const userLogout = asyncHandler(

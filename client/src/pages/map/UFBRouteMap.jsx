@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
+import BloodSeekerInfo from './BloodSeekerInfo';
+import BloodDonorInfo from './BloodDonorInfo';
 
 const UFBRouteMap = () => {
-
-const { seekerCoords, donorCoords } = useSelector((state) => state.coordinatesReducer);
+  const { seekerCoords, donorCoords } = useSelector((state) => state.coordinatesReducer);
   const mapRef = useRef(null);
   const infoRef = useRef(null);
 
@@ -23,6 +24,11 @@ const { seekerCoords, donorCoords } = useSelector((state) => state.coordinatesRe
   const [destMarker, setDestMarker] = useState(null);
 
   const API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+
+  const { seekerId } = useSelector(state=> state.coordinatesReducer);
+  const { userProfile } = useSelector(state=> state.userReducer);
+
+  
 
   // Define initMap function before useEffect
   const initMap = () => {
@@ -223,45 +229,52 @@ const { seekerCoords, donorCoords } = useSelector((state) => state.coordinatesRe
     return R * c;
   };
 
-  // Debug logs
-  useEffect(() => {
-    console.log("Seeker Latitude:", pickupCoordsArray[0]);
-    console.log("Seeker Longitude:", pickupCoordsArray[1]);
-  }, [pickupCoordsArray]);
+  // // Debug logs
+  // useEffect(() => {
+  //   console.log("Seeker Latitude:", pickupCoordsArray[0]);
+  //   console.log("Seeker Longitude:", pickupCoordsArray[1]);
+  // }, [pickupCoordsArray]);
 
   return (
-    <div className="fixed inset-0 w-screen h-screen overflow-hidden">
-      <div ref={mapRef} id="map" className="absolute inset-0 w-full h-full z-0 rounded-none" />
-      
-      {/* Location status display */}
-      <div className="absolute top-6 left-1/2 -translate-x-1/2 z-10 w-full max-w-2xl px-2 flex flex-col items-center">
-        <div className="backdrop-blur-md bg-white/70 border border-blue-100 shadow-xl rounded-2xl p-4 w-full">
-          <div className="text-center">
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-green-600 font-medium">
-                🟢 Seeker: {pickupPlace ? 'Located' : 'Loading...'}
-              </span>
-              <span className="text-red-600 font-medium">
-                🔴 Donor: {destPlace ? 'Located' : 'Loading...'}
-              </span>
-            </div>
-            {pickupPlace && destPlace && (
-              <div className="text-blue-600 font-medium">
-                🛣️ Route calculated automatically
+    <div className="min-h-screen bg-gray-50 p-4">
+      {/* Map Container */}
+      <div className="relative mx-auto mb-6" style={{ width: '80%', height: '60vh' }}>
+        <div ref={mapRef} id="map" className="w-full h-full rounded-lg shadow-lg" />
+        
+        {/* Location status display */}
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10 w-full max-w-md px-2">
+          <div className="backdrop-blur-md bg-white/90 border border-blue-100 shadow-xl rounded-lg p-3">
+            <div className="text-center">
+              <div className="flex justify-between items-center mb-2 text-sm">
+                <span className="text-green-600 font-medium">
+                  🟢 Seeker: {pickupPlace ? 'Located' : 'Loading...'}
+                </span>
+                <span className="text-red-600 font-medium">
+                  🔴 Donor: {destPlace ? 'Located' : 'Loading...'}
+                </span>
               </div>
-            )}
+              {pickupPlace && destPlace && (
+                <div className="text-blue-600 font-medium text-sm">
+                  🛣️ Route calculated automatically
+                </div>
+              )}
+            </div>
           </div>
+        </div>
+
+        {/* Route information display */}
+        <div className="absolute top-20 left-1/2 -translate-x-1/2 z-10 w-full max-w-md px-2">
+          <div
+            ref={infoRef}
+            className="text-center bg-white/90 rounded-lg shadow p-3 text-sm text-gray-700 transition-all duration-500 opacity-0 translate-y-2"
+            id="info"
+          ></div>
         </div>
       </div>
 
-      {/* Route information display */}
-      <div className="absolute top-28 left-1/2 -translate-x-1/2 z-10 w-full max-w-xl px-2">
-        <div
-          ref={infoRef}
-          className="text-center bg-white/80 rounded-lg shadow p-4 text-base text-gray-700 transition-all duration-500 opacity-0 translate-y-2"
-          id="info"
-        ></div>
-      </div>
+      {/* Seeker Information Section */}
+      {seekerId !== userProfile?._id ? <BloodSeekerInfo /> : <BloodDonorInfo/> }
+      
     </div>
   );
 };

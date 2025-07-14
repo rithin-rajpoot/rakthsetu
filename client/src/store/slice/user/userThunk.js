@@ -57,6 +57,20 @@ export const getUserProfileThunk = createAsyncThunk('user/getProfile',
     }
 );
 
+export const getUserProfileByIdThunk = createAsyncThunk('user/getProfileById',
+    async ({id}, { rejectWithValue }) => {
+        try {
+            console.log(id)
+            const response = await axiosInstance.get(`/user/get-profileById/${id}`);
+            return response.data;
+
+        } catch (error) {
+            const errorOutput = error?.response?.data?.errMessage;
+            return rejectWithValue(errorOutput)
+        }
+    }
+);
+
 export const logoutUserThunk = createAsyncThunk('user/logout',
     async (_, { rejectWithValue }) => {
         try {

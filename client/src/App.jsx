@@ -1,6 +1,6 @@
 import React, { useDebugValue, useEffect } from "react";
 import { Toaster } from "react-hot-toast";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getUserProfileThunk } from "./store/slice/user/userThunk";
 import { Routes, Route } from "react-router-dom";
 import LandingPage from "./pages/home/LandingPage";
@@ -8,9 +8,11 @@ import ProtectedRoute from "../components/ProtectedRoute";
 import Login from "./pages/auth/Login";
 import Signup from "./pages/auth/Signup";
 import RequestForm from "./pages/request/RequestForm";
-import UserProfile from "./pages/home/userProfile/UserProfile";
+import UserProfile from "./pages/home/UserProfile";
 import MatchedDonors from "./pages/request/MatchedDonors";
 import UFBRouteMap from "./pages/map/UFBRouteMap";
+import Header from "./pages/home/Header";
+import Footer from "./pages/home/Footer";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -21,9 +23,12 @@ const App = () => {
     })();
   }, []);
 
+  const {isAuthenticated} = useSelector(state=>state.userReducer)
+
   return (
     <>
       <Toaster position="top-center" reverseOrder={false} />
+      <Header/>
       <Routes>
         <Route
           path="/"
@@ -35,11 +40,12 @@ const App = () => {
         />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup /> } />
-        <Route path="/request-form" element={<RequestForm />} />
-        <Route path="/user-profile" element={<UserProfile />} />
-        <Route path="/matched-donors" element={<MatchedDonors />} />
-        <Route path="/map" element={<UFBRouteMap />}/>
+        <Route path="/request-form" element={<ProtectedRoute> <RequestForm /> </ProtectedRoute>} />
+        <Route path="/user-profile" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
+        <Route path="/matched-donors" element={<ProtectedRoute><MatchedDonors /></ProtectedRoute>} />
+        <Route path="/map" element={<ProtectedRoute><UFBRouteMap /></ProtectedRoute>}/>
       </Routes>
+      <Footer/>
     </>
   );
 };

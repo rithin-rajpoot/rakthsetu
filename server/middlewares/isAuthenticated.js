@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
-import  { asyncHandler }  from '../utils/asyncHandler.js';
-import { errorHandler }  from '../utils/errorHandler.js';
+import  { asyncHandler }  from '../utils/asyncHandler.util.js';
+import { errorHandler }  from '../utils/errorHandler.util.js';
 
 const isAuthenticated = asyncHandler(async (req, res, next) => {
     const token = req.cookies.token || req.headers.authorization?.split(' ')[1];/* || req.query.token*/ // we have sent the token in cookie while login and signup

@@ -1,7 +1,7 @@
 import User from "../models/user.js";
-import { asyncHandler } from "../utils/asyncHandler.js";
+import { asyncHandler } from "../utils/asyncHandler.util.js";
 import validateUser from "../middlewares/validateUser.js";
-import { errorHandler } from "../utils/errorHandler.js";
+import { errorHandler } from "../utils/errorHandler.util.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { getCoordinates } from "../controllers/utilities/nameToLatLong.js";

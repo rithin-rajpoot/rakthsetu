@@ -1,8 +1,8 @@
 import BloodRequest from "../models/request.js"; // Import model
 import matchDonor from "../controllers/utilities/matchDonor.js";
-import { asyncHandler } from "../utils/asyncHandler.js";
+import { asyncHandler } from "../utils/asyncHandler.util.js";
 import User from "../models/user.js";
-import { errorHandler } from "../utils/errorHandler.js";
+import { errorHandler } from "../utils/errorHandler.util.js";
 import { io } from "../socket/socket.js";
 import { getCoordinates } from "../controllers/utilities/nameToLatLong.js";
 

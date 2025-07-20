@@ -1,13 +1,21 @@
-import axios from 'axios';
+// Function to get latitude and longitude from a location name
+export const getCoordinates = async (locationName) => {
+    try {
+        const response = await fetch(
+            `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(locationName)}&format=json&limit=1`
+        );
+        const data = await response.json();
 
-export const  getCoordinates = async (address) => {
-  const apiKey = process.env.GOOGLE_MAPS_API_KEY; // Ensure you have set your API key in environment variables
-  const encodedAddress = encodeURIComponent(address);
-  const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodedAddress}&key=${apiKey}`;
+        if (data.length > 0) {
+            const lat = parseFloat(data[0].lat);
+            const lon = parseFloat(data[0].lon);
+            return [lat, lon ]; 
+        } else {
+            return null;
+        }
+    } catch (error) {
+        console.error("Error fetching coordinates:", error);
+        return null;
+    }
+};
 
-  const response = await axios.get(url);
-//   console.log(response.data);
-  const location = response.data.results[0].geometry.location;
-
-  return [location.lat, location.lng]; // Return coordinates in [longitude, latitude] format
-}

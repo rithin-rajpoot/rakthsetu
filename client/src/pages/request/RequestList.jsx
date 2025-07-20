@@ -23,7 +23,7 @@ const RequestList = () => {
         const coords = request?.location?.coordinates;
         if (!coords) continue;
   
-        const cached = locationNameCache[request._id];
+        const cached = locationNameCache[request?._id];
         if (cached) continue;
   
         const name = await getLocationName(coords[0], coords[1]);
@@ -38,7 +38,7 @@ const RequestList = () => {
       setLocationNames(namesMap);
     };
   
-    if (allRequests.length > 0) {
+    if (allRequests?.length > 0) {
       fetchNames();
     }
   }, [allRequests, locationNameCache]);
@@ -46,7 +46,7 @@ const RequestList = () => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4 bg-gray-50 items-stretch">
       {allRequests?.map((request) => {
-        return <RequestCard key={request?._id} request={request} locationName={locationNames[request._id]} />;
+        return <RequestCard key={request?._id} request={request} locationName={locationNames[request?._id]} />;
       })}
     </div>
   );

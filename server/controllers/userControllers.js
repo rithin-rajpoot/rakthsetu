@@ -1,10 +1,10 @@
 import User from "../models/user.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import validateUser from "../middlewares/validateUser.js";
-import { errorHandler} from "../utils/errorHandler.js";
+import { errorHandler } from "../utils/errorHandler.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { getCoordinates } from "./utilities/nameToLatLong.js";
+import { getCoordinates } from "../controllers/utilities/nameToLatLong.js";
 
 export const userSignUp = asyncHandler(async (req, res, next) => {
   let { fullName, username, password, email, phone, bloodType, location } = req.body;

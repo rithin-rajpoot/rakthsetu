@@ -15,6 +15,9 @@ export const createBloodRequest = asyncHandler(async (req, res, next) => {
 
   // Usage
   const coordinates = await getCoordinates(location);
+  if (coordinates === null) {
+    return next(new errorHandler("Invalid location name", 400));
+  }
   // console.log(coordinates);
   // Create a new blood request document
   const newRequest = new BloodRequest({

@@ -28,8 +28,6 @@ const UFBRouteMap = () => {
   const { seekerId } = useSelector(state=> state.coordinatesReducer);
   const { userProfile } = useSelector(state=> state.userReducer);
 
-  
-
   // Define initMap function before useEffect
   const initMap = () => {
     const google = window.google;
@@ -37,12 +35,31 @@ const UFBRouteMap = () => {
       center: { lat: 17.385044, lng: 78.486671 },
       zoom: 13,
       disableDefaultUI: false,
+      mapTypeControl: false,
+      streetViewControl: false,
+      fullscreenControl: true,
+      zoomControl: true,
+      styles: [
+        {
+          featureType: "poi",
+          elementType: "labels",
+          stylers: [{ visibility: "off" }]
+        }
+      ]
     });
 
     setMap(_map);
 
     const service = new google.maps.DirectionsService();
-    const renderer = new google.maps.DirectionsRenderer({ map: _map });
+    const renderer = new google.maps.DirectionsRenderer({ 
+      map: _map,
+      suppressMarkers: false,
+      polylineOptions: {
+        strokeColor: '#2563eb',
+        strokeWeight: 4,
+        strokeOpacity: 0.8
+      }
+    });
     setDirectionsService(service);
     setDirectionsRenderer(renderer);
   };
@@ -54,7 +71,6 @@ const UFBRouteMap = () => {
         script.src = `https://maps.googleapis.com/maps/api/js?key=${API_KEY}&libraries=places&callback=initGoogleMap`;
         script.async = true;
         script.defer = true;
-        // Set up global callback function
         window.initGoogleMap = initMap;
         document.body.appendChild(script);
       } else {
@@ -76,19 +92,19 @@ const UFBRouteMap = () => {
     setPickupCoordsArray([coords.lat, coords.lng]);
     setCoordinatesArray(prev => [coords, prev[1] || null]);
 
-    // Remove existing pickup marker
     if (pickupMarker) pickupMarker.setMap(null);
     
-    // Add new pickup marker
     const marker = new google.maps.Marker({
       position: location,
       map: map,
-      title: "Seeker Location",
-      icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png",
+      title: "Blood Seeker Location",
+      icon: {
+        url: "http://maps.google.com/mapfiles/ms/icons/green-dot.png",
+        scaledSize: new google.maps.Size(40, 40)
+      },
     });
     setPickupMarker(marker);
     
-    // Center map on pickup location
     map.setCenter(location);
   };
 
@@ -103,30 +119,28 @@ const UFBRouteMap = () => {
     setDestCoords(coords);
     setCoordinatesArray(prev => [prev[0] || null, coords]);
 
-    // Remove existing destination marker
     if (destMarker) destMarker.setMap(null);
     
-    // Add new destination marker
     const marker = new google.maps.Marker({
       position: location,
       map: map,
-      title: "Donor Location",
-      icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png",
+      title: "Blood Donor Location",
+      icon: {
+        url: "http://maps.google.com/mapfiles/ms/icons/red-dot.png",
+        scaledSize: new google.maps.Size(40, 40)
+      },
     });
     setDestMarker(marker);
   };
 
-  // Handle seeker location (pickup)
   useEffect(() => {
     if (seekerCoords && map) {
       const google = window.google;
       
       let location;
       if (seekerCoords?.lat && seekerCoords?.lng) {
-        // If coordinates are provided directly
         location = new google.maps.LatLng(seekerCoords?.lat, seekerCoords?.lng);
       } else if (seekerCoords?.address) {
-        // If address is provided, use Geocoding API
         const geocoder = new google.maps.Geocoder();
         geocoder.geocode({ address: seekerCoords?.address }, (results, status) => {
           if (status === 'OK' && results[0]) {
@@ -143,17 +157,14 @@ const UFBRouteMap = () => {
     }
   }, [seekerCoords, map]);
 
-  // Handle donor location (destination)
   useEffect(() => {
     if (donorCoords && map) {
       const google = window.google;
       
       let location;
       if (donorCoords?.lat && donorCoords?.lng) {
-        // If coordinates are provided directly
         location = new google.maps.LatLng(donorCoords?.lat, donorCoords?.lng);
       } else if (donorCoords?.address) {
-        // If address is provided, use Geocoding API
         const geocoder = new google.maps.Geocoder();
         geocoder.geocode({ address: donorCoords?.address }, (results, status) => {
           if (status === 'OK' && results[0]) {
@@ -170,7 +181,6 @@ const UFBRouteMap = () => {
     }
   }, [donorCoords, map]);
 
-  // Auto-calculate route when both locations are available
   useEffect(() => {
     if (pickupPlace && destPlace && directionsService && directionsRenderer) {
       calculateRoute();
@@ -203,9 +213,20 @@ const UFBRouteMap = () => {
 
           if (infoRef.current) {
             infoRef.current.innerHTML =
-              `🚗 <b>Driving Distance:</b> ${distance}<br/>` +
-              `⏱ <b>Estimated Time:</b> ${duration}<br/>` +
-              `📏 <b>Straight Line:</b> ${straight.toFixed(2)} km`;
+              `<div class="flex flex-col space-y-1">
+                <div class="flex items-center justify-center space-x-2">
+                  <span class="text-blue-600">🚗</span>
+                  <span class="font-medium">${distance}</span>
+                </div>
+                <div class="flex items-center justify-center space-x-2">
+                  <span class="text-green-600">⏱</span>
+                  <span class="font-medium">${duration}</span>
+                </div>
+                <div class="flex items-center justify-center space-x-2">
+                  <span class="text-purple-600">📏</span>
+                  <span class="font-medium">${straight.toFixed(2)} km direct</span>
+                </div>
+              </div>`;
             infoRef.current.classList.remove('opacity-0', 'translate-y-2');
             infoRef.current.classList.add('opacity-100', 'translate-y-0');
           }
@@ -229,52 +250,82 @@ const UFBRouteMap = () => {
     return R * c;
   };
 
-  // // Debug logs
-  // useEffect(() => {
-  //   console.log("Seeker Latitude:", pickupCoordsArray[0]);
-  //   console.log("Seeker Longitude:", pickupCoordsArray[1]);
-  // }, [pickupCoordsArray]);
-
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
-      {/* Map Container */}
-      <div className="relative mx-auto mb-6" style={{ width: '80%', height: '60vh' }}>
-        <div ref={mapRef} id="map" className="w-full h-full rounded-lg shadow-lg" />
-        
-        {/* Location status display */}
-        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10 w-full max-w-md px-2">
-          <div className="backdrop-blur-md bg-white/90 border border-blue-100 shadow-xl rounded-lg p-3">
-            <div className="text-center">
-              <div className="flex justify-between items-center mb-2 text-sm">
-                <span className="text-green-600 font-medium">
-                  🟢 Seeker: {pickupPlace ? 'Located' : 'Loading...'}
-                </span>
-                <span className="text-red-600 font-medium">
-                  🔴 Donor: {destPlace ? 'Located' : 'Loading...'}
-                </span>
-              </div>
-              {pickupPlace && destPlace && (
-                <div className="text-blue-600 font-medium text-sm">
-                  🛣️ Route calculated automatically
+    <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-blue-50">
+      {/* Header Section */}
+      <div className="bg-white shadow-sm border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex items-center justify-center space-x-2">
+            <div className="flex items-center space-x-2">
+              <span className="text-2xl">🗺️</span>
+              <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
+                Blood Donation Route
+              </h1>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        {/* Map Container */}
+        <div className="relative mb-8">
+          <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200">
+            {/* Status Bar */}
+            <div className="bg-gradient-to-r from-gray-50 to-gray-100 px-4 py-3 border-b border-gray-200">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
+                <div className="flex items-center space-x-4">
+                  <div className="flex items-center space-x-2">
+                    <div className={`w-3 h-3 rounded-full ${pickupPlace ? 'bg-green-500' : 'bg-gray-300'} animate-pulse`}></div>
+                    <span className="text-sm font-medium text-gray-700">
+                      Seeker {pickupPlace ? 'Located' : 'Locating...'}
+                    </span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <div className={`w-3 h-3 rounded-full ${destPlace ? 'bg-red-500' : 'bg-gray-300'} animate-pulse`}></div>
+                    <span className="text-sm font-medium text-gray-700">
+                      Donor {destPlace ? 'Located' : 'Locating...'}
+                    </span>
+                  </div>
                 </div>
-              )}
+                {pickupPlace && destPlace && (
+                  <div className="flex items-center space-x-2 text-blue-600">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path>
+                    </svg>
+                    <span className="text-sm font-medium">Route Active</span>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Map */}
+            <div className="relative">
+              <div 
+                ref={mapRef} 
+                className="w-full h-[65vh] sm:h-80 md:h-96 lg:h-[500px]"
+              />
+              
+              {/* Route Info Overlay */}
+              <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-10 w-full max-w-xs px-4">
+                <div
+                  ref={infoRef}
+                  className="bg-white/95 backdrop-blur-sm rounded-xl shadow-lg border border-white/20 p-4 text-sm text-gray-800 transition-all duration-500 opacity-0 translate-y-2"
+                />
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Route information display */}
-        <div className="absolute top-20 left-1/2 -translate-x-1/2 z-10 w-full max-w-md px-2">
-          <div
-            ref={infoRef}
-            className="text-center bg-white/90 rounded-lg shadow p-3 text-sm text-gray-700 transition-all duration-500 opacity-0 translate-y-2"
-            id="info"
-          ></div>
+        {/* Information Section */}
+        <div className="mt-6">
+          {seekerId !== userProfile?._id ? (
+            <BloodSeekerInfo />
+          ) : (
+            <BloodDonorInfo />
+          )}
         </div>
       </div>
-
-      {/* Seeker Information Section */}
-      {seekerId !== userProfile?._id ? <BloodSeekerInfo /> : <BloodDonorInfo/> }
-      
     </div>
   );
 };

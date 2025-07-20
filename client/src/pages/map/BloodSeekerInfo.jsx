@@ -5,7 +5,7 @@ const BloodSeekerInfo = () => {
 
   const { userData } = useSelector(state=>state.userReducer);
   return (
-    <div className="mx-auto bg-white rounded-lg shadow-lg p-6" style={{ width: '80%' }}>
+    <div className="w-full max-w-7xl mx-auto bg-white rounded-lg shadow-lg p-6" >
         <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center border-b pb-3">
           Blood Seeker Information
         </h2>

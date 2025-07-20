@@ -12,12 +12,15 @@ export const userSignUp = asyncHandler(async (req, res, next) => {
     return next(new errorHandler( "All fields are required", 400)) ;
   }
   const coordinates = await getCoordinates(location);
+  if(coordinates === null) {
+    return next(new errorHandler("Invalid location name", 400));
+  }
 
   const user = await User.findOne({ username });
   if (user) {
     return next(new errorHandler("User already exists", 400));
   }
-
+  
   let userData = {
     //creates and saves the user,
     fullName,
@@ -34,6 +37,7 @@ export const userSignUp = asyncHandler(async (req, res, next) => {
   validateUser(userData); // if there is any error it will throw an error caught by AsyncHandler
   const hashedPassword = await bcrypt.hash(password, 10);
   userData.password = hashedPassword;
+  
   const newUser = new User(userData);
   newUser.save();
   // Generate and send JWT

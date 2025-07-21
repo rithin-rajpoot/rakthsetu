@@ -25,6 +25,9 @@ const UFBRouteMap = () => {
 
   const API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
+  const { seekerId } = useSelector(state=> state.coordinatesReducer);
+  const { userProfile } = useSelector(state=> state.userReducer);
+
   // Define initMap function before useEffect
   const initMap = () => {
     const google = window.google;

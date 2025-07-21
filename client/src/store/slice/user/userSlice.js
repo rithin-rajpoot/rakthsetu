@@ -104,7 +104,7 @@ const userSlice = createSlice({
             state.userProfile = null;
             state.otherUsers = null;
             state.isAuthenticated = false;
-            state.loading = false;
+            state.loading = true;
             state.activeUserRole = 'donor';
             state.activeTab = 'requests';
         });

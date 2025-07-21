@@ -1,6 +1,6 @@
 import React, { useDebugValue, useEffect } from "react";
 import { Toaster } from "react-hot-toast";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getUserProfileThunk } from "./store/slice/user/userThunk";
 import { Routes, Route } from "react-router-dom";
 import LandingPage from "./pages/home/LandingPage";
@@ -11,15 +11,24 @@ import RequestForm from "./pages/request/RequestForm";
 import UserProfile from "./pages/home/userProfile/UserProfile";
 import MatchedDonors from "./pages/request/MatchedDonors";
 import UFBRouteMap from "./pages/map/UFBRouteMap";
+import { Loader } from "lucide-react";
 
 const App = () => {
   const dispatch = useDispatch();
+  const { isAuthenticated, loading } = useSelector((state) => state.userReducer);
 
   useEffect(() => {
     (async () => {
       await dispatch(getUserProfileThunk());
     })();
   }, []);
+
+  if(loading && !isAuthenticated) return (
+      <div className="flex flex-col justify-center items-center h-screen">
+         <Loader className="size-10 animate-spin text-black"/>
+         <p>Loading...</p>
+      </div>
+     )
 
   return (
     <>

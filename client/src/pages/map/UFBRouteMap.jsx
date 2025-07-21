@@ -23,8 +23,7 @@ const { seekerCoords, donorCoords } = useSelector((state) => state.coordinatesRe
   const [destMarker, setDestMarker] = useState(null);
 
   const API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
-  console.log(API_KEY)
-
+  
   // Define initMap function before useEffect
   const initMap = () => {
     const google = window.google;

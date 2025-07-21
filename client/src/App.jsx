@@ -11,19 +11,17 @@ import RequestForm from "./pages/request/RequestForm";
 import UserProfile from "./pages/home/UserProfile";
 import MatchedDonors from "./pages/request/MatchedDonors";
 import UFBRouteMap from "./pages/map/UFBRouteMap";
-import Header from "./pages/home/Header";
-import Footer from "./pages/home/Footer";
+
 
 const App = () => {
   const dispatch = useDispatch();
+  const { isAuthenticated, loading } = useSelector((state) => state.userReducer);
 
   useEffect(() => {
     (async () => {
       await dispatch(getUserProfileThunk());
     })();
   }, []);
-
-  const {isAuthenticated} = useSelector(state=>state.userReducer)
 
   return (
     <>

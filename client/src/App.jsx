@@ -8,10 +8,10 @@ import ProtectedRoute from "../components/ProtectedRoute";
 import Login from "./pages/auth/Login";
 import Signup from "./pages/auth/Signup";
 import RequestForm from "./pages/request/RequestForm";
-import UserProfile from "./pages/home/userProfile/UserProfile";
+import UserProfile from "./pages/home/UserProfile";
 import MatchedDonors from "./pages/request/MatchedDonors";
 import UFBRouteMap from "./pages/map/UFBRouteMap";
-import { Loader } from "lucide-react";
+
 
 const App = () => {
   const dispatch = useDispatch();
@@ -23,16 +23,10 @@ const App = () => {
     })();
   }, []);
 
-  if(loading && !isAuthenticated) return (
-      <div className="flex flex-col justify-center items-center h-screen">
-         <Loader className="size-10 animate-spin text-black"/>
-         <p>Loading...</p>
-      </div>
-     )
-
   return (
     <>
       <Toaster position="top-center" reverseOrder={false} />
+      <Header/>
       <Routes>
         <Route
           path="/"
@@ -44,11 +38,12 @@ const App = () => {
         />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup /> } />
-        <Route path="/request-form" element={<RequestForm />} />
-        <Route path="/user-profile" element={<UserProfile />} />
-        <Route path="/matched-donors" element={<MatchedDonors />} />
-        <Route path="/map" element={<UFBRouteMap />}/>
+        <Route path="/request-form" element={<ProtectedRoute> <RequestForm /> </ProtectedRoute>} />
+        <Route path="/user-profile" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
+        <Route path="/matched-donors" element={<ProtectedRoute><MatchedDonors /></ProtectedRoute>} />
+        <Route path="/map" element={<ProtectedRoute><UFBRouteMap /></ProtectedRoute>}/>
       </Routes>
+      <Footer/>
     </>
   );
 };

@@ -1,10 +1,10 @@
 import User from "../models/user.js";
-import { asyncHandler } from "../utils/asyncHandler.js";
+import { asyncHandler } from "../utils/asyncHandler.util.js";
 import validateUser from "../middlewares/validateUser.js";
-import { errorHandler} from "../utils/errorHandler.js";
+import { errorHandler } from "../utils/errorHandler.util.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { getCoordinates } from "./utilities/nameToLatLong.js";
+import { getCoordinates } from "../controllers/utilities/nameToLatLong.js";
 
 export const userSignUp = asyncHandler(async (req, res, next) => {
   let { fullName, username, password, email, phone, bloodType, location } = req.body;
@@ -12,12 +12,15 @@ export const userSignUp = asyncHandler(async (req, res, next) => {
     return next(new errorHandler( "All fields are required", 400)) ;
   }
   const coordinates = await getCoordinates(location);
+  if(coordinates === null) {
+    return next(new errorHandler("Invalid location name", 400));
+  }
 
   const user = await User.findOne({ username });
   if (user) {
     return next(new errorHandler("User already exists", 400));
   }
-
+  
   let userData = {
     //creates and saves the user,
     fullName,
@@ -34,6 +37,7 @@ export const userSignUp = asyncHandler(async (req, res, next) => {
   validateUser(userData); // if there is any error it will throw an error caught by AsyncHandler
   const hashedPassword = await bcrypt.hash(password, 10);
   userData.password = hashedPassword;
+  
   const newUser = new User(userData);
   newUser.save();
   // Generate and send JWT
@@ -121,6 +125,16 @@ export const getProfile = asyncHandler(async (req, res, next) => {
   });
 })
 
+export const getProfileById = asyncHandler(async (req, res, next) => {
+  const userId = req.params.id;
+  // console.log("userId-",userId)
+  const userData = await User.findById(userId);
+    
+  res.status(200).json({
+    success: true,
+    responseData: userData
+  });
+})
 
 
 export const userLogout = asyncHandler(

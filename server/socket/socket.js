@@ -30,11 +30,10 @@ io.on("connection", (socket) => {
         activeUsers.set(userId, socket.id);
     }
 
-    socket.on('donor-responded', ({ seekerId, donorLocation, seekerLocation }) => {
+    socket.on('donor-responded', ({ seekerId, donorLocation, seekerLocation, userId }) => {
     const seekerSocketId = activeUsers.get(seekerId);
-    console.log(seekerLocation,donorLocation);
     if (seekerSocketId) {
-      io.to(seekerSocketId).emit('show-map', {donorLocation,seekerLocation}); // Emit donor location to seeker
+      io.to(seekerSocketId).emit('show-map', {donorLocation, seekerLocation, seekerId, donorId:userId}); // Emit donor location to seeker
     }
   });
 

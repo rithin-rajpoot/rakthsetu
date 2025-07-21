@@ -4,6 +4,7 @@ const initialState = {
     buttonLoading: false,
     seekerCoords:{},
     donorCoords:{},
+    seekerId: JSON.parse(localStorage.getItem('storeSeekerId')) || null,
 }
 
 const coordinateSlice = createSlice({
@@ -11,18 +12,20 @@ const coordinateSlice = createSlice({
     initialState,
     reducers: {
         setSeekerCoords: (state, action) => {
-            // action.payload = { seekerId: { lat: 0, lng: 0 } }
-           console.log("Setting seeker coordinates:", action.payload);
             state.seekerCoords = action.payload;
         },
 
         setDonorCoords: (state, action) => {
-            console.log("Setting donor coordinates:", action.payload);
             state.donorCoords = action.payload;
+        },
+
+        setSeekerId: (state, action) => {
+            localStorage.setItem('storeSeekerId',JSON.stringify(action.payload))
+            state.seekerId = action.payload;
         },
     },
     
 })
-export const { setSeekerCoords, setDonorCoords } = coordinateSlice.actions;
+export const { setSeekerCoords, setDonorCoords, setSeekerId} = coordinateSlice.actions;
 
 export default coordinateSlice.reducer

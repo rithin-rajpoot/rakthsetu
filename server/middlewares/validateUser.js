@@ -1,5 +1,5 @@
-import userSchema from  "../utils/validationSchema.js";
-import { errorHandler } from "../utils/errorHandler.js";
+import userSchema from  "../utils/validationSchema.util.js";
+import { errorHandler } from "../utils/errorHandler.util.js";
 const validateUser = (userData)=>{
     const result = userSchema.validate(userData,{abortEarly:false});
     if(result.error)

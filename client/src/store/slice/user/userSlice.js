@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { deleteRequestThunk, getUserProfileThunk, loginUserThunk, logoutUserThunk, signupUserThunk } from './userThunk'
+import { deleteRequestThunk, getUserProfileByIdThunk, getUserProfileThunk, loginUserThunk, logoutUserThunk, signupUserThunk } from './userThunk'
+import {getLocationName} from '../../../../components/utils/latLongToName'
 
 const initialState = {
     isAuthenticated: false,
@@ -8,7 +9,8 @@ const initialState = {
     otherUsers: [],
     activeUserRole: 'donor',
     activeTab: 'requests',
-    buttonLoading: false
+    buttonLoading: false,
+    userData: JSON.parse(localStorage.getItem('storeUserData')) || null// used for displaying in map component
 }
 
 const userSlice = createSlice({
@@ -21,6 +23,11 @@ const userSlice = createSlice({
         setActiveTab: (state, action) => {
             state.activeTab = action.payload
         },
+        // setUserLocation: async (state, action) => {
+        //     const coordinates = action.payload;
+        //     const location = await getLocationName(coordinates[0], coordinates[1]);
+        //     state.userProfile?.location = location;
+        // }
 
     },
 
@@ -73,6 +80,21 @@ const userSlice = createSlice({
             state.loading = false;
         });
 
+        // get user profile by id
+        builder.addCase(getUserProfileByIdThunk.pending, (state, action) => {
+        });
+
+        builder.addCase(getUserProfileByIdThunk.fulfilled, (state, action) => {
+            const data = action.payload?.responseData;
+            localStorage.setItem('storeUserData',JSON.stringify(data))
+            state.userData = data
+            state.loading = false;
+        });
+
+        builder.addCase(getUserProfileByIdThunk.rejected, (state, action) => {
+            state.loading = false;
+        });
+
         // Logout
         builder.addCase(logoutUserThunk.pending, (state, action) => {
             state.loading = true;
@@ -108,6 +130,6 @@ const userSlice = createSlice({
         });
     },
 })
-export const { setActiveUserRole, setActiveTab } = userSlice.actions;
+export const { setActiveUserRole, setActiveTab, setUserLocation } = userSlice.actions;
 
 export default userSlice.reducer

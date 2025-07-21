@@ -3,12 +3,16 @@ import { getBloodTypeColor, getUrgencyColor } from "./utils/utilityMethods";
 import { getDonorCoords } from "../map/methods/getDonorCoords";
 import { useDispatch, useSelector } from "react-redux";
 import { setDonorCoords, setSeekerCoords } from "../../store/slice/coordinates/coordinateSlice";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { getUserProfileByIdThunk } from "../../store/slice/user/userThunk";
+import { getSocket } from "../../../components/utils/socketService";
 
 const RequestCard = ({ request, locationName }) => {
 
-  const { socket } = useSelector((state) => state.socketReducer);
+  const socket  = getSocket();
+  const {userProfile} = useSelector((state)=> state.userReducer);
+  const userId = userProfile?._id;
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   
@@ -27,9 +31,10 @@ const RequestCard = ({ request, locationName }) => {
       lng: seekerLocation?.coordinates[1]
     }
 
-    socket.emit("donor-responded", { seekerId, donorLocation, seekerLocation });
+    socket.emit("donor-responded", { seekerId, donorLocation, seekerLocation, userId});
     dispatch(setSeekerCoords(seekerLocation));
     dispatch(setDonorCoords(donorLocation));
+    await dispatch(getUserProfileByIdThunk({id: seekerId}));
 
     navigate("/map");
   };

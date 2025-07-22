@@ -11,10 +11,13 @@ export const userSignUp = asyncHandler(async (req, res, next) => {
   if (!fullName || !username || !email || !phone || !password || !bloodType || !location) {
     return next(new errorHandler( "All fields are required", 400)) ;
   }
-  const coordinates = await getCoordinates(location);
-  if(coordinates === null) {
+  const rawCoordinates = await getCoordinates(location);
+  if(rawCoordinates === null) {
     return next(new errorHandler("Invalid location name", 400));
   }
+  
+  // Ensure coordinates is always an array
+  const coordinates = Array.isArray(rawCoordinates) ? rawCoordinates : [0, 0];
 
   const user = await User.findOne({ username });
   if (user) {
@@ -22,7 +25,6 @@ export const userSignUp = asyncHandler(async (req, res, next) => {
   }
   
   let userData = {
-    //creates and saves the user,
     fullName,
     username,
     password,
@@ -39,7 +41,7 @@ export const userSignUp = asyncHandler(async (req, res, next) => {
   userData.password = hashedPassword;
   
   const newUser = new User(userData);
-  newUser.save();
+  await newUser.save(); // Added await
   // Generate and send JWT
   const tokenData = {
     _id: newUser?._id,
@@ -51,7 +53,6 @@ export const userSignUp = asyncHandler(async (req, res, next) => {
   res
     .status(200)
     .cookie("token", token, {
-      // value: token,
       expires: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
       httpOnly: true,
       secure: true,
@@ -82,7 +83,7 @@ export const userLogin = asyncHandler(
 
     const isValidPassword = await bcrypt.compare(password, user.password);
     if (!isValidPassword) {
-      return next(new errorHandler("Your password or username is Invalid!", 400))
+      return next(new errorHandler("Invalid credentials", 401));
     }
 
     // Generate and send JWT
@@ -127,7 +128,6 @@ export const getProfile = asyncHandler(async (req, res, next) => {
 
 export const getProfileById = asyncHandler(async (req, res, next) => {
   const userId = req.params.id;
-  // console.log("userId-",userId)
   const userData = await User.findById(userId);
     
   res.status(200).json({

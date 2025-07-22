@@ -23,11 +23,7 @@ const userSlice = createSlice({
         setActiveTab: (state, action) => {
             state.activeTab = action.payload
         },
-        // setUserLocation: async (state, action) => {
-        //     const coordinates = action.payload;
-        //     const location = await getLocationName(coordinates[0], coordinates[1]);
-        //     state.userProfile?.location = location;
-        // }
+     
 
     },
 
@@ -104,7 +100,7 @@ const userSlice = createSlice({
             state.userProfile = null;
             state.otherUsers = null;
             state.isAuthenticated = false;
-            state.loading = true;
+            state.loading = false;
             state.activeUserRole = 'donor';
             state.activeTab = 'requests';
         });

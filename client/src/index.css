@@ -7,15 +7,62 @@
 @layer base {
   * {
     @apply border-border;
+    -webkit-tap-highlight-color: transparent;
   }
   
   body {
     @apply bg-background text-foreground font-sans;
     font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    touch-action: manipulation;
   }
 
   html {
     scroll-behavior: smooth;
+  }
+
+  /* Improve touch targets for mobile */
+  button, [role="button"], input[type="submit"], input[type="button"] {
+    touch-action: manipulation;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    min-height: 44px; /* iOS touch target minimum */
+    min-width: 44px;
+  }
+
+  /* Fix mobile button active states */
+  button:active, [role="button"]:active {
+    transform: scale(0.95);
+  }
+
+  /* Prevent zoom on focus for iOS */
+  input, select, textarea {
+    font-size: 16px;
+  }
+
+  /* Better scrolling on iOS */
+  * {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Mobile-specific improvements */
+  @media (max-width: 768px) {
+    /* Ensure mobile navigation is properly displayed */
+    .mobile-nav-item {
+      min-height: 48px;
+      touch-action: manipulation;
+    }
+  }
+
+  /* Tablet-specific improvements */
+  @media (min-width: 769px) and (max-width: 1024px) {
+    /* Ensure medium device navigation works properly */
+    button {
+      min-height: 40px;
+    }
   }
 }
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { CiUser } from "react-icons/ci";
 import { Home, Menu, X } from "lucide-react";
@@ -8,13 +8,43 @@ const Header = () => {
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { isAuthenticated, userProfile } = useSelector(state => state.userReducer);
+  const mobileMenuRef = useRef(null);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
+  const handleHomeClick = () => {
+    navigate("/");
+    setIsMobileMenuOpen(false);
+  };
+
+  const handleProfileClick = () => {
+    navigate("/user-profile");
+    setIsMobileMenuOpen(false);
+  };
+
+  // Close mobile menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target)) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    if (isMobileMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('touchstart', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
+  }, [isMobileMenuOpen]);
+
   return (
-    <>
+    <div ref={mobileMenuRef}>
       <header className="bg-gradient-to-r from-red-600 via-red-600 to-red-700 shadow-2xl sticky top-0 z-50 backdrop-blur-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 sm:h-20">
@@ -40,17 +70,18 @@ const Header = () => {
               <div className="hidden md:flex items-center space-x-3">
                 <button 
                   onClick={() => navigate("/")} 
-                  className="group bg-white/15 hover:bg-white/25 text-white px-5 py-2.5 rounded-xl flex items-center space-x-2 transition-all duration-300 backdrop-blur-md border border-white/30 hover:border-white/50 hover:shadow-lg hover:scale-105"
+                  className="group bg-white/15 hover:bg-white/25 active:bg-white/30 text-white px-4 lg:px-5 py-2.5 rounded-xl flex items-center space-x-2 transition-all duration-200 backdrop-blur-md border border-white/30 hover:border-white/50 focus:outline-none focus:ring-2 focus:ring-white/50 touch-manipulation"
                 >
-                  <Home size={18} className="group-hover:scale-110 transition-transform duration-300" />
-                  <span className="font-semibold">Home</span>
+                  <Home size={18} className="group-hover:scale-110 transition-transform duration-200" />
+                  <span className="font-semibold hidden lg:inline">Home</span>
                 </button>
                 
-                <Link to="/user-profile">
-                  <button className="group bg-white/15 hover:bg-white/25 p-3 rounded-xl transition-all duration-300 backdrop-blur-md border border-white/30 hover:border-white/50 hover:shadow-lg hover:scale-105">
-                    <CiUser className="w-6 h-6 text-white group-hover:scale-110 transition-transform duration-300" />
-                  </button>
-                </Link>
+                <button 
+                  onClick={() => navigate("/user-profile")}
+                  className="group bg-white/15 hover:bg-white/25 active:bg-white/30 p-3 rounded-xl transition-all duration-200 backdrop-blur-md border border-white/30 hover:border-white/50 focus:outline-none focus:ring-2 focus:ring-white/50 touch-manipulation"
+                >
+                  <CiUser className="w-6 h-6 text-white group-hover:scale-110 transition-transform duration-200" />
+                </button>
               </div>
             )}
 
@@ -59,7 +90,9 @@ const Header = () => {
               <div className="md:hidden">
                 <button
                   onClick={toggleMobileMenu}
-                  className="bg-white/15 hover:bg-white/25 p-2.5 rounded-xl transition-all duration-300 border border-white/30"
+                  className="bg-white/15 hover:bg-white/25 active:bg-white/30 p-3 rounded-xl transition-all duration-200 border border-white/30 focus:outline-none focus:ring-2 focus:ring-white/50 touch-manipulation"
+                  aria-label="Toggle menu"
+                  aria-expanded={isMobileMenuOpen}
                 >
                   {isMobileMenuOpen ? (
                     <X className="w-6 h-6 text-white" />
@@ -85,10 +118,10 @@ const Header = () => {
 
       {/* Mobile Navigation Menu */}
       {isAuthenticated && (
-        <div className={`md:hidden bg-gradient-to-r from-red-600 to-red-700 border-t border-white/20 shadow-lg transition-all duration-300 ease-in-out ${
+        <div className={`md:hidden bg-gradient-to-r from-red-600 to-red-700 border-t border-white/20 shadow-lg transition-all duration-300 ease-in-out relative z-40 ${
           isMobileMenuOpen 
-            ? 'max-h-80 opacity-100' 
-            : 'max-h-0 opacity-0 overflow-hidden'
+            ? 'block' 
+            : 'hidden'
         }`}>
           <div className="px-4 py-4 space-y-3">
             {userProfile?.fullName && (
@@ -101,30 +134,24 @@ const Header = () => {
             )}
             
             <button 
-              onClick={() => {
-                navigate("/");
-                setIsMobileMenuOpen(false);
-              }} 
-              className="w-full bg-white/15 hover:bg-white/25 text-white px-4 py-3 rounded-xl flex items-center space-x-3 transition-all duration-300 backdrop-blur-md border border-white/30 hover:scale-105"
+              onClick={handleHomeClick} 
+              className="mobile-nav-item w-full bg-white/15 hover:bg-white/25 active:bg-white/30 text-white px-4 py-3 rounded-xl flex items-center space-x-3 transition-all duration-200 backdrop-blur-md border border-white/30 focus:outline-none focus:ring-2 focus:ring-white/50"
             >
               <Home size={20} />
               <span className="font-semibold">Home</span>
             </button>
             
-            <Link 
-              to="/user-profile" 
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="block"
+            <button 
+              onClick={handleProfileClick}
+              className="mobile-nav-item w-full bg-white/15 hover:bg-white/25 active:bg-white/30 text-white px-4 py-3 rounded-xl flex items-center space-x-3 transition-all duration-200 backdrop-blur-md border border-white/30 focus:outline-none focus:ring-2 focus:ring-white/50"
             >
-              <button className="w-full bg-white/15 hover:bg-white/25 text-white px-4 py-3 rounded-xl flex items-center space-x-3 transition-all duration-300 backdrop-blur-md border border-white/30 hover:scale-105">
-                <CiUser className="w-5 h-5" />
-                <span className="font-semibold">Profile</span>
-              </button>
-            </Link>
+              <CiUser className="w-5 h-5" />
+              <span className="font-semibold">Profile</span>
+            </button>
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 

@@ -30,23 +30,23 @@ const userSlice = createSlice({
     extraReducers: (builder) => {
         // Login 
         builder.addCase(loginUserThunk.pending, (state, action) => {
-            state.loading = true;
+            state.buttonLoading = true;
         });
 
         builder.addCase(loginUserThunk.fulfilled, (state, action) => { 
             state.userProfile = action.payload?.responseData?.user
             state.isAuthenticated = true;
             state.loading = false;
+            state.buttonLoading = false;
         });
 
         builder.addCase(loginUserThunk.rejected, (state, action) => { 
-            state.loading = false;
+            state.buttonLoading = false;
         });
 
 
         // Sign up user
         builder.addCase(signupUserThunk.pending, (state, action) => {
-            state.loading = true;
             state.buttonLoading = true;
         });
 
@@ -93,24 +93,25 @@ const userSlice = createSlice({
 
         // Logout
         builder.addCase(logoutUserThunk.pending, (state, action) => {
-            state.loading = true;
+            state.buttonLoading = true;
         });
 
         builder.addCase(logoutUserThunk.fulfilled, (state, action) => {
             state.userProfile = null;
             state.otherUsers = null;
             state.isAuthenticated = false;
-            state.loading = false;
+            state.buttonLoading = false;
             state.activeUserRole = 'donor';
             state.activeTab = 'requests';
         });
 
         builder.addCase(logoutUserThunk.rejected, (state, action) => {
+            state.buttonLoading = false;
         });
 
         // delete blood request
         builder.addCase(deleteRequestThunk.pending, (state, action) => {
-            state.loading = true;
+            state.buttonLoading = true;
         });
 
         builder.addCase(deleteRequestThunk.fulfilled, (state, action) => { 
@@ -118,11 +119,11 @@ const userSlice = createSlice({
             state.userProfile.userBloodRequests = state.userProfile.userBloodRequests.filter(
                 (request) => request._id !== deletedId)
 
-            state.loading = false;
+            state.buttonLoading = false;
         });
 
         builder.addCase(deleteRequestThunk.rejected, (state, action) => { 
-            state.loading = false;
+            state.buttonLoading = false;
         });
     },
 })

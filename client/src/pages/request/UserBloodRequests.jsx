@@ -7,7 +7,7 @@ import { setMatchedDonors } from "../../store/slice/request/requestSlice";
 
 const UserBloodRequests = () => {
   const dispatch = useDispatch();
-  const { userProfile, loading } = useSelector((state) => state.userReducer);
+  const { userProfile, loading, buttonLoading } = useSelector((state) => state.userReducer);
   const myRequests = userProfile?.userBloodRequests;
   const navigate = useNavigate();
 
@@ -104,9 +104,17 @@ const UserBloodRequests = () => {
                 <td className="px-[4.3rem] py-4">
                   <button
                     onClick={() => handleDelete(request?._id)}
-                    className="px-5 py-1.5 text-xs bg-red-500 rounded-lg text-white"
+                    disabled={buttonLoading}
+                    className="px-5 py-1.5 text-xs bg-red-500 hover:bg-red-600 rounded-lg text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
                   >
-                    Delete
+                    {buttonLoading ? (
+                      <div className="flex items-center">
+                        <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-white mr-1"></div>
+                        Deleting...
+                      </div>
+                    ) : (
+                      "Delete"
+                    )}
                   </button>
                 </td>
               </tr>

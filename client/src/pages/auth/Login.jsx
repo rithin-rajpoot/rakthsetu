@@ -12,20 +12,18 @@ const Login = () => {
     password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (e) => {
     setLoginData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const { isAuthenticated } = useSelector(state=>state.userReducer);
+  const { isAuthenticated, buttonLoading } = useSelector(state=>state.userReducer);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   
   const handleLogin = async () => {
     if (!loginData.username || !loginData.password) return;
     
-    setIsLoading(true);
     try {
       const response = await dispatch(loginUserThunk(loginData));
       if (response?.payload?.success) {
@@ -33,8 +31,6 @@ const Login = () => {
       }
     } catch (error) {
       console.error('Login error:', error);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -128,10 +124,10 @@ const Login = () => {
           {/* Login Button */}
           <button 
             onClick={handleLogin} 
-            disabled={isLoading || !loginData.username || !loginData.password}
+            disabled={buttonLoading || !loginData.username || !loginData.password}
             className="w-full modern-button disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
           >
-            {isLoading ? (
+            {buttonLoading ? (
               <div className="flex items-center justify-center">
                 <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
                 Signing In...

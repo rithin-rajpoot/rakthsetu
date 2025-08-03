@@ -9,7 +9,6 @@ export const createBloodRequestThunk = createAsyncThunk('request/createBloodRequ
             const response = await axiosInstance.post('/request/create-blood-request', {
                 fullName, location, urgency, bloodType
             });
-            toast.success("Blood request created successfully")
             return response.data;
 
         } catch (error) {

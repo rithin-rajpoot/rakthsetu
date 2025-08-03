@@ -67,19 +67,27 @@ const LandingPage = () => {
 
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
-
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-red-50">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+      
       {/* Main Content */}
-      <main className="flex-grow max-w-7xl mx-auto w-full px-4 py-6 sm:px-6">
-        <RoleSwitcher />
-        <CreateBloodRequest />
-        <StatsOverview />
-        <Tabs />
-        {isOpen && (<FloatingCard isOpen={isOpen} onClose={()=>{setIsOpen(!isOpen)}}/>)}
-        <GetContent />
+      <main className="relative flex-grow max-w-7xl mx-auto w-full px-4 py-8 sm:px-6 lg:px-8">
+        <div className="space-y-8">
+          <RoleSwitcher />
+          <CreateBloodRequest />
+          <StatsOverview />
+          <Tabs />
+          <GetContent />
+        </div>
+        
+        {/* Floating Card Modal */}
+        {isOpen && (
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <FloatingCard isOpen={isOpen} onClose={() => setIsOpen(false)} />
+          </div>
+        )}
       </main>
- 
-      {/* <footer className="text-black">@all rights reserved</footer> */}
     </div>
   );
 };

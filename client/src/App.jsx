@@ -13,6 +13,7 @@ import MatchedDonors from "./pages/request/MatchedDonors";
 import UFBRouteMap from "./pages/map/UFBRouteMap";
 import Header from "./pages/home/Header";
 import Footer from "./pages/home/Footer";
+import ScrollToTop from "../components/ScrollToTop";
 import { Loader } from "lucide-react";
 
 const App = () => {
@@ -39,6 +40,7 @@ const App = () => {
   return (
     <>
       <Toaster position="top-center" reverseOrder={false} />
+      <ScrollToTop />
       <Header />
       <Routes>
         <Route

@@ -59,7 +59,7 @@ const Header = () => {
               </div>
               <div className="hidden sm:block">
                 <h1 className="text-white text-xl sm:text-2xl font-bold tracking-tight">
-                  UberForBlood
+                  RakthSetu
                 </h1>
                 <p className="text-white/90 text-sm font-medium">Save Lives Together</p>
               </div>

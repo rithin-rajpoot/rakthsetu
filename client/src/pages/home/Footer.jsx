@@ -18,10 +18,10 @@ const Footer = () => {
           {/* Logo & Mission Section */}
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
-              <img className="w-12 h-12" src="/images/Logo.png" alt="UFB Logo" />
+              <img className="w-12 h-12" src="/images/Logo.png" alt="RakthSetu Logo" />
               <div>
-                <h3 className="text-xl font-bold">UFB</h3>
-                <p className="text-sm text-red-100">Uber for Blood</p>
+                <h6 className="text-xsm font-bold ">RakthSetu</h6>
+                <h6 className="text-sm text-red-100">Save Lives Together</h6>
               </div>
             </div>
             <p className="text-red-100 text-sm leading-relaxed">

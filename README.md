@@ -365,6 +365,7 @@ We welcome contributions! Here's how you can help:
 | Role | Name | GitHub |
 |------|------|--------|
 | **🚀 Lead Developer** | AdarshChary | [@adarshchary](https://github.com/adarshchary) |
+| **⚙️ External API Integration** | Abhishek | [@Abhi5hek-20](https://github.com/Abhi5hek-20) |
 | **📊 Repository Owner** | Rithin Rajpoot | [@rithin-rajpoot](https://github.com/rithin-rajpoot) |
 
 *Special thanks to all contributors who make this project possible!*

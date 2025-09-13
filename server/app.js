@@ -31,11 +31,11 @@ app.use(cookieParser());
 
 // user routes : 
 import userRouter from './routes/userRouter.js';
-app.use("/ufb/user", userRouter)
+app.use("/rakthsetu/user", userRouter)
 
 // request routes : 
 import bloodRequestRouter from './routes/requestRouter.js';
-app.use("/ufb/request", bloodRequestRouter);
+app.use("/rakthsetu/request", bloodRequestRouter);
 
 
 // ERROR HANDLING MIDDLEWARE
@@ -46,5 +46,5 @@ app.use(errorMiddleware);
 // Start the server 
 const port = process.env.PORT || 5000
 server.listen(port,()=>{
-    console.log(`UFB SERVER LAUNCHED AT :`, port);
+    console.log(`RakthSetu SERVER LAUNCHED AT :`, port);
 })

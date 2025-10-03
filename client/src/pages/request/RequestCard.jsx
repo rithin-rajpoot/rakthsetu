@@ -7,14 +7,28 @@ import { useNavigate } from "react-router-dom";
 import { getUserProfileByIdThunk } from "../../store/slice/user/userThunk";
 import { getSocket } from "../../../components/utils/socketService";
 import { MapPin, Clock, User, Heart } from "lucide-react";
+import { setDonorPopup, setIsDonorAccepted } from "../../store/slice/request/requestSlice";
+import { useEffect } from "react";
 
 const RequestCard = ({ request, locationName }) => {
   const socket = getSocket();
   const {userProfile} = useSelector((state)=> state.userReducer);
+  const { isDonorAccepted } = useSelector((state) => state.requestReducer);
   const userId = userProfile?._id;
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+
+  useEffect( () => {
+    // Close popup when donor accepts the request
+    if (isDonorAccepted) {
+      dispatch(setDonorPopup({isOpen:false, seekerName:""})); // close popup before navigating
+      handleRespond(request?.seekerId, request?.location)
+    }
+
+    return () => {dispatch(setIsDonorAccepted(false))} // reset isDonorAccepted when component unmounts
+  }, [isDonorAccepted]);
 
   const handleRespond = async (seekerId, seekerLocation) => {
     const donorLocation = await getDonorCoords();
@@ -108,7 +122,7 @@ const RequestCard = ({ request, locationName }) => {
       {/* Action Button */}
       <div className="mt-6">
         <button
-          onClick={() => handleRespond(request?.seekerId, request?.location)}
+          onClick={() => {dispatch(setDonorPopup({isOpen:true, seekerName:request?.fullName}))}}
           className="w-full modern-button flex items-center justify-center space-x-2 group"
         >
           <Heart className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" />

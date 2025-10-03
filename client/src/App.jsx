@@ -15,9 +15,11 @@ import Header from "./pages/home/Header";
 import Footer from "./pages/home/Footer";
 import ScrollToTop from "../components/ScrollToTop";
 import { Loader } from "lucide-react";
+import DonorPopup from "./pages/request/DonorPopup";
 
 const App = () => {
   const dispatch = useDispatch();
+  const { donorPopup } = useSelector((state) => state.requestReducer);
 
   useEffect(() => {
     (async () => {
@@ -88,7 +90,10 @@ const App = () => {
         />
       </Routes>
       <Footer />
+
+      {donorPopup?.isOpen && <DonorPopup />} {/* Donor Popup Component */}
     </>
+
   );
 };
 

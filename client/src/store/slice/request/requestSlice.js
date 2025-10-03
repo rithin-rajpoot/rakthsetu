@@ -7,6 +7,8 @@ const initialState = {
     allRequests: [],
     locationNameCache: {},
     popUp: false,
+    donorPopup: {isOpen:false, seekerName:""}, //  show seeker name in popup
+    isDonorAccepted: false,
 }
 
 const requestSlice = createSlice({
@@ -41,7 +43,13 @@ const requestSlice = createSlice({
         
         setPopUp: (state, action) => {
             state.popUp = action.payload;
-        }
+        },
+        setDonorPopup: (state, action) => {
+            state.donorPopup = action.payload; // set open/false popup for donor & store seeker name
+        },
+        setIsDonorAccepted: (state, action) => {
+            state.isDonorAccepted = action.payload; // set true if donor accepted the request -> useEffect listens this state to call handleRespond()
+        }               
     },
     extraReducers: (builder) => {
         // create blood request
@@ -77,6 +85,6 @@ const requestSlice = createSlice({
         });
     },
 })
-export const { updateRequests, removeRequestFromList, setLocationNameCache, setMatchedDonors, resetRequestState } = requestSlice.actions;
+export const { updateRequests, removeRequestFromList, setLocationNameCache, setMatchedDonors, resetRequestState, setDonorPopup, setIsDonorAccepted } = requestSlice.actions;
 
 export default requestSlice.reducer
